@@ -31,8 +31,8 @@ const navItems: NavItem[] = [
 ];
 
 export const siteConfig = {
-  name: env.config.siteMeta.title || baseConfig.name,
-  description: env.config.siteMeta.description || baseConfig.description,
+  name: env.config.siteMeta.title ?? baseConfig.name,
+  description: env.config.siteMeta.description ?? baseConfig.description,
   icon: env.config.siteMeta.icon
     ? env.config.siteMeta.icon.startsWith('http')
       ? env.config.siteMeta.icon

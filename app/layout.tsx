@@ -16,11 +16,8 @@ import { Providers } from './providers';
 import { Toaster } from 'sonner';
 
 export const metadata: Metadata = {
-  title: {
-    default: 'Kuma Mieru',
-    template: siteConfig.name ? `%s - ${siteConfig.name}` : '%s - Kuma Mieru',
-  },
-  description: siteConfig.description || 'Kuma Mieru',
+  title: siteConfig.name ?? 'Kuma Mieru',
+  description: siteConfig.description ?? 'Kuma Mieru',
   icons: {
     icon: siteConfig.icon,
   },
@@ -31,6 +28,8 @@ export const metadata: Metadata = {
     telephone: false,
   },
 };
+
+console.log(metadata);
 
 export const viewport: Viewport = {
   themeColor: [
@@ -52,7 +51,6 @@ export default async function RootLayout({
 
   return (
     <html suppressHydrationWarning={true} lang={locale}>
-      <head />
       <body
         className={clsx(
           'min-h-screen bg-background font-sans antialiased',
