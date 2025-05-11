@@ -1,5 +1,6 @@
 'use client';
 
+import { addDocumentData } from '@/app/lib/utils';
 import AutoRefresh from '@/components/AutoRefresh';
 import { MonitorCard } from '@/components/MonitorCard';
 import { MonitorCardSkeleton } from '@/components/ui/CommonSkeleton';
@@ -7,7 +8,7 @@ import { revalidateData, useMonitor } from '@/components/utils/swr';
 import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { use } from 'react';
+import { use, useEffect } from 'react';
 
 const pageVariants = {
   initial: {
@@ -41,6 +42,10 @@ export default function MonitorDetail({
   const router = useRouter();
 
   const { monitor, monitoringData, isLoading, isError, error } = useMonitor(resolvedParams.id);
+
+  useEffect(() => {
+    addDocumentData();
+  }, []);
 
   const handleRefresh = async () => {
     await revalidateData();

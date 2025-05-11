@@ -19,8 +19,9 @@ import { LayoutGrid, LayoutList } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 
+import { addDocumentData } from '@/app/lib/utils';
+import { siteConfig } from '@/config/site';
 import type { Monitor, MonitorGroup } from '@/types/monitor';
-import {siteConfig} from "@/config/site";
 
 const GLOBAL_VIEW_PREFERENCE_KEY = 'view-preference';
 
@@ -45,14 +46,7 @@ export default function Home() {
   const viewT = useTranslations('view');
 
   useEffect(() => {
-    if (document) {
-      document.title = siteConfig.name ?? "Kuma Mieru";
-      let link: HTMLLinkElement = document.querySelector("link[rel*='icon']") ?? document.createElement('link');
-      link.type = "image/x-icon";
-      link.rel = 'shortcut icon';
-      link.href = siteConfig.icon;
-      document.getElementsByTagName('head')[0].appendChild(link);
-    }
+    addDocumentData();
   }, []);
 
   useEffect(() => {
