@@ -129,7 +129,7 @@ export const Navbar = () => {
         <NavbarBrand className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
             <Image
-              src={getIconUrl() || '/icon.svg'}
+              src={siteConfig.icon ?? '/icon.svg'}
               alt={`${apiConfig.siteMeta.title} logo`}
               width={34}
               height={34}
