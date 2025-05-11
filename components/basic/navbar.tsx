@@ -115,12 +115,13 @@ export const Navbar = () => {
   );
 
   const getIconUrl = () => {
-    if (apiConfig.siteMeta.icon) {
-      return isExternalUrl(apiConfig.siteMeta.icon)
-        ? apiConfig.siteMeta.icon
-        : new URL(apiConfig.siteMeta.icon, apiConfig.baseUrl).toString();
-    }
-    return '';
+    // if (apiConfig.siteMeta.icon) {
+    //   return isExternalUrl(apiConfig.siteMeta.icon)
+    //     ? apiConfig.siteMeta.icon
+    //     : new URL(apiConfig.siteMeta.icon, apiConfig.baseUrl).toString();
+    // }
+    console.log(siteConfig.icon);
+    return siteConfig.icon;
   };
 
   return (
@@ -128,11 +129,12 @@ export const Navbar = () => {
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
-            <Image
-              src={siteConfig.icon ?? '/icon.svg'}
-              alt={`${apiConfig.siteMeta.title} logo`}
+            <img
+              src={getIconUrl() ?? '/icon.svg'}
+              alt=''
               width={34}
               height={34}
+              loading="eager"
             />
             <p className="font-bold text-inherit">{apiConfig.siteMeta.title}</p>
           </NextLink>
