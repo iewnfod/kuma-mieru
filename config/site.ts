@@ -12,6 +12,7 @@ type NavItem = {
   label: string;
   href: string;
   external: boolean;
+  show: boolean;
 };
 
 const navItems: NavItem[] = [
@@ -19,11 +20,13 @@ const navItems: NavItem[] = [
     label: 'page.main',
     href: '/',
     external: false,
+    show: true,
   },
   {
     label: 'page.edit',
     href: `${env.config.baseUrl}/manage-status-page`,
     external: true,
+    show: env.config.isEditThisPage,
   },
 ];
 

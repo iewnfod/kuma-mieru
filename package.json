@@ -11,7 +11,7 @@
   },
   "private": true,
   "scripts": {
-    "dev": "bun run linter && next dev --turbopack --port 3881",
+    "dev": "bun run linter && next dev --port 3881",
     "build": "next build",
     "start": "bun .next/standalone/server.js",
     "start:docker": "bun run generate && bun run scripts/docker-init.ts && bun ./server.js",
@@ -80,8 +80,5 @@
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3"
   },
-  "trustedDependencies": [
-    "@biomejs/biome",
-    "@heroui/shared-utils"
-  ]
+  "trustedDependencies": ["@biomejs/biome", "@heroui/shared-utils"]
 }

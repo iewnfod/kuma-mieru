@@ -140,19 +140,23 @@ export const Navbar = () => {
         <nav aria-label={t('navbar.main')}>
           <ul className="hidden lg:flex gap-4 justify-start ml-2">
             {siteConfig.navItems.map((item) => (
-              <li key={item.href}>
-                <NextLink
-                  className={clsx(
-                    linkStyles({ color: 'foreground' }),
-                    'data-[active=true]:text-primary data-[active=true]:font-medium',
-                  )}
-                  color="foreground"
-                  href={item.href}
-                  target={item.external ? '_blank' : '_self'}
-                >
-                  {t(item.label)}
-                </NextLink>
-              </li>
+              <>
+                {item.show ? (
+                  <li key={item.href}>
+                    <NextLink
+                      className={clsx(
+                        linkStyles({ color: 'foreground' }),
+                        'data-[active=true]:text-primary data-[active=true]:font-medium',
+                      )}
+                      color="foreground"
+                      href={item.href}
+                      target={item.external ? '_blank' : '_self'}
+                    >
+                      {t(item.label)}
+                    </NextLink>
+                  </li>
+                ) : null}
+              </>
             ))}
           </ul>
         </nav>
@@ -207,7 +211,7 @@ export const Navbar = () => {
       </NavbarContent>
 
       <NavbarMenu className="z-[60]">
-        {apiConfig.isShowStarButton && starButton}
+        {apiConfig.isShowStarButton ?? starButton}
         <div className="flex flex-col gap-4">{searchInput}</div>
         <nav aria-label={t('navbar.mobileNav')}>
           <ul className="mx-4 mt-4 flex flex-col gap-2">
