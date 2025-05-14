@@ -251,6 +251,7 @@ docker run -d \
 | FEATURE_TITLE            | No   | 自定义页面标题                  | Kuma Mieru                                         |
 | FEATURE_DESCRIPTION      | No   | 自定义页面描述                  | A beautiful and modern uptime monitoring dashboard |
 | FEATURE_ICON             | No   | 自定义页面图标URL               | /icon.svg                                          |
+| FEATURE_HOME_LINK        | No   | 自定义 "Home" 按钮 URL        | /                                          |
 
 ## 与 Uptime Kuma 集成 :link:
 

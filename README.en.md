@@ -242,6 +242,7 @@ Then, the environment variables you need to configure are as follows:
 | FEATURE_TITLE            | No       | Custom page title                       | My Monitoring Dashboard            |
 | FEATURE_DESCRIPTION      | No       | Custom page description                 | A beautiful monitoring dashboard   |
 | FEATURE_ICON             | No       | Custom page icon URL                    | /icon.svg                          |
+| FEATURE_HOME_LINK        | No       | Custom "Home" button URL                | /                                          |
 
 ### Health Check
 
