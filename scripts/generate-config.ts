@@ -18,6 +18,7 @@ const configSchema = z.object({
   isPlaceholder: z.boolean().default(false),
   isEditThisPage: z.boolean().default(false),
   isShowStarButton: z.boolean().default(true),
+  isShowHomeButton: z.boolean().default(true),
 });
 
 function getRequiredEnvVar(name: string): string {
@@ -108,6 +109,7 @@ async function generateConfig() {
 
     const isEditThisPage = getBooleanEnvVar('FEATURE_EDIT_THIS_PAGE', false);
     const isShowStarButton = getBooleanEnvVar('FEATURE_SHOW_STAR_BUTTON', true);
+    const isShowHomeButton = getBooleanEnvVar('FEATURE_SHOW_HOME_BUTTON', true);
     const siteMeta = await fetchSiteMeta(baseUrl, pageId);
 
     const config = configSchema.parse({
@@ -117,6 +119,7 @@ async function generateConfig() {
       isPlaceholder: false,
       isEditThisPage,
       isShowStarButton,
+      isShowHomeButton,
     });
 
     const configPath = path.join(process.cwd(), 'config', 'generated-config.json');

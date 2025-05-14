@@ -241,15 +241,16 @@ docker run -d \
 
 那么您需要配置的环境变量如下：
 
-| 变量名                   | 必填 | 说明                           | 示例/默认值                                        |
-| ------------------------ | ---- | ------------------------------ | -------------------------------------------------- |
-| UPTIME_KUMA_BASE_URL     | Yes  | Uptime Kuma 实例的基础 URL     | https://example.kuma-mieru.invalid                 |
-| PAGE_ID                  | Yes  | Uptime Kuma 实例的状态页面 ID  | test1                                              |
+| 变量名                      | 必填 | 说明                       | 示例/默认值                                        |
+|--------------------------| ---- |--------------------------| -------------------------------------------------- |
+| UPTIME_KUMA_BASE_URL     | Yes  | Uptime Kuma 实例的基础 URL    | https://example.kuma-mieru.invalid                 |
+| PAGE_ID                  | Yes  | Uptime Kuma 实例的状态页面 ID   | test1                                              |
 | FEATURE_EDIT_THIS_PAGE   | No   | 是否展示 "Edit This Page" 按钮 | false                                              |
 | FEATURE_SHOW_STAR_BUTTON | No   | 是否展示 "Star on Github" 按钮 | true                                               |
-| FEATURE_TITLE            | No   | 自定义页面标题                 | Kuma Mieru                                         |
-| FEATURE_DESCRIPTION      | No   | 自定义页面描述                 | A beautiful and modern uptime monitoring dashboard |
-| FEATURE_ICON             | No   | 自定义页面图标URL              | /icon.svg                                          |
+| FEATURE_SHOW_HOME_BUTTON | No   | 是否展示 "Home" 按钮           | true                                               |
+| FEATURE_TITLE            | No   | 自定义页面标题                  | Kuma Mieru                                         |
+| FEATURE_DESCRIPTION      | No   | 自定义页面描述                  | A beautiful and modern uptime monitoring dashboard |
+| FEATURE_ICON             | No   | 自定义页面图标URL               | /icon.svg                                          |
 
 ## 与 Uptime Kuma 集成 :link:
 

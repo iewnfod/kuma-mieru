@@ -20,7 +20,7 @@ const navItems: NavItem[] = [
     label: 'page.main',
     href: '/',
     external: false,
-    show: true,
+    show: env.config.isShowHomeButton,
   },
   {
     label: 'page.edit',
