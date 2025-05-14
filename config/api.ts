@@ -2,8 +2,15 @@ import type { Config } from '@/types/config';
 import { env } from './env';
 
 export const getConfig = (): Config => {
-  const { baseUrl, pageId, siteMeta, isEditThisPage, isShowStarButton, isShowHomeButton } =
-    env.config;
+  const {
+    baseUrl,
+    pageId,
+    siteMeta,
+    isEditThisPage,
+    isShowStarButton,
+    isShowHomeButton,
+    homeLink,
+  } = env.config;
   const { NODE_ENV } = env.runtime;
 
   if (!baseUrl || !pageId) {
@@ -20,6 +27,7 @@ export const getConfig = (): Config => {
     isEditThisPage: isEditThisPage ?? false,
     isShowStarButton: isShowStarButton ?? true,
     isShowHomeButton: isShowHomeButton ?? true,
+    homeLink: homeLink ?? '/',
   };
 
   if (NODE_ENV === 'development') {

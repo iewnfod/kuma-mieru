@@ -18,8 +18,8 @@ type NavItem = {
 const navItems: NavItem[] = [
   {
     label: 'page.main',
-    href: '/',
-    external: false,
+    href: env.config.homeLink ?? '/',
+    external: env.config.homeLink !== '/',
     show: env.config.isShowHomeButton,
   },
   {

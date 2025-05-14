@@ -10,4 +10,5 @@ export interface GeneratedConfig {
   isEditThisPage: boolean;
   isShowStarButton: boolean;
   isShowHomeButton: boolean;
+  homeLink: string;
 }

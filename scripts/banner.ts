@@ -85,6 +85,11 @@ const configGroups: ConfigGroup[] = [
         value: process.env.FEATURE_SHOW_STAR_BUTTON,
         defaultValue: 'true (Default)',
       },
+      {
+        name: 'FEATURE_SHOW_HOME_BUTTON',
+        value: process.env.FEATURE_SHOW_HOME_BUTTON,
+        defaultValue: 'true (Default)',
+      },
     ],
   },
   {
@@ -105,6 +110,11 @@ const configGroups: ConfigGroup[] = [
       {
         name: 'FEATURE_ICON',
         value: process.env.FEATURE_ICON,
+        defaultValue: 'Using Default',
+      },
+      {
+        name: 'FEATURE_HOME_LINK',
+        value: process.env.FEATURE_HOME_LINK,
         defaultValue: 'Using Default',
       },
     ],
