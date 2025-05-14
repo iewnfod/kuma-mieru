@@ -19,7 +19,7 @@ const configSchema = z.object({
   isEditThisPage: z.boolean().default(false),
   isShowStarButton: z.boolean().default(true),
   isShowHomeButton: z.boolean().default(true),
-  homeLink: z.string().url().default('/'),
+  homeLink: z.string().default('/'),
 });
 
 function getRequiredEnvVar(name: string): string {
