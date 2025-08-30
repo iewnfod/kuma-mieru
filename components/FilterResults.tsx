@@ -6,10 +6,10 @@ import {
   Button,
   Checkbox,
   Chip,
-  Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  Dropdown as HeroUIDropdown,
   Tooltip,
 } from '@heroui/react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -96,7 +96,7 @@ export default function FilterResults({ matchedMonitorsCount }: FilterResultsPro
           </div>
           <div className="flex flex-wrap items-center gap-2 mt-2 sm:mt-0">
             {/* 状态筛选器下拉菜单 */}
-            <Dropdown>
+            <HeroUIDropdown>
               <DropdownTrigger>
                 <Button
                   variant="flat"
@@ -151,7 +151,7 @@ export default function FilterResults({ matchedMonitorsCount }: FilterResultsPro
                   {t('node.statusFilter.maintenance')}
                 </DropdownItem>
               </DropdownMenu>
-            </Dropdown>
+            </HeroUIDropdown>
 
             {/* 在分组中搜索选项 */}
             <div className="flex items-center gap-1">

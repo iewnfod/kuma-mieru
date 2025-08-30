@@ -20,7 +20,6 @@ const pageVariants = {
     y: 0,
     transition: {
       duration: 0.4,
-      ease: [0.4, 0, 0.2, 1],
     },
   },
   exit: {
@@ -32,11 +31,7 @@ const pageVariants = {
   },
 };
 
-export default function MonitorDetail({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default function MonitorDetail({ params }: { params: Promise<{ id: string }> }) {
   const t = useTranslations();
   const resolvedParams = use(params);
   const router = useRouter();

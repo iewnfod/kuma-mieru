@@ -2,7 +2,13 @@
 
 import { type Locale, locales } from '@/utils/i18n/config';
 import { setUserLocale } from '@/utils/i18n/locale';
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, cn } from '@heroui/react';
+import {
+  Button,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Dropdown as HeroUIDropdown,
+} from '@heroui/react';
 import { Languages, Loader2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
@@ -37,7 +43,7 @@ export const I18NSwitch = () => {
   };
 
   return (
-    <Dropdown aria-label="Switch Language">
+    <HeroUIDropdown aria-label="Switch Language">
       <DropdownTrigger>
         <Button variant="light" isIconOnly className="text-default-500">
           {isPending ? (
@@ -68,6 +74,6 @@ export const I18NSwitch = () => {
           </DropdownItem>
         ))}
       </DropdownMenu>
-    </Dropdown>
+    </HeroUIDropdown>
   );
 };

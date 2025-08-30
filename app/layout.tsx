@@ -36,15 +36,14 @@ export const viewport: Viewport = {
   ],
 };
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const locale = await getLocale();
-  const messages = await getMessages();
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // Parallel fetch i18n data and global config to reduce waiting time
+  const [locale, messages, { config }] = await Promise.all([
+    getLocale(),
+    getMessages(),
+    getGlobalConfig(),
+  ]);
 
-  const { config } = await getGlobalConfig();
   const { theme, googleAnalyticsId } = config;
 
   return (
@@ -61,7 +60,7 @@ export default async function RootLayout({
           <Providers themeProps={{ attribute: 'class', defaultTheme: theme }}>
             <div className="relative flex flex-col h-screen">
               <Navbar />
-              <main className="container mx-auto max-w-7xl pt-4 px-6 flex-grow">{children}</main>
+              <main className="container mx-auto max-w-7xl pt-4 px-6 grow">{children}</main>
               <Footer config={config} />
               <Toaster position="top-center" richColors />
             </div>

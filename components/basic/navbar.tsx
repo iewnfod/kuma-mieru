@@ -94,7 +94,7 @@ export const Navbar = () => {
         labelPlacement="outside"
         placeholder={t('node.search')}
         startContent={
-          <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
+          <SearchIcon className="text-base text-default-400 pointer-events-none shrink-0" />
         }
         type="search"
       />
@@ -206,7 +206,7 @@ export const Navbar = () => {
         </nav>
       </NavbarContent>
 
-      <NavbarMenu className="z-[60]">
+      <NavbarMenu className="z-60">
         {apiConfig.isShowStarButton ?? starButton}
         <div className="flex flex-col gap-4">{searchInput}</div>
         <nav aria-label={t('navbar.mobileNav')}>

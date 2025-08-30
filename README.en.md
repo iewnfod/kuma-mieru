@@ -20,7 +20,7 @@ Built with Next.js 15, TypeScript, and Recharts, this project enhances Uptime Ku
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![React](https://img.shields.io/badge/React-v19-387CA0?style=flat-square&logo=react&logoColor=white)](https://reactjs.org/) [![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js&logoColor=white)](https://nextjs.org/)
 
-[![Bun](https://img.shields.io/badge/Bun-Package%20Manager-14151A?style=flat-square&logo=bun&logoColor=white)](https://bun.sh/) [![Recharts](https://img.shields.io/badge/Recharts-Charting%20Library-8884d8?style=flat-square&logo=recharts&logoColor=white)](https://recharts.org/en-US/) [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-v3-4EB9FA?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Bun](https://img.shields.io/badge/Bun-Package%20Manager-14151A?style=flat-square&logo=bun&logoColor=white)](https://bun.sh/) [![Recharts](https://img.shields.io/badge/Recharts-Charting%20Library-8884d8?style=flat-square&logo=recharts&logoColor=white)](https://recharts.org/en-US/) [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-v4-4EB9FA?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
 <!-- Project Data -->
 
@@ -39,6 +39,7 @@ Built with Next.js 15, TypeScript, and Recharts, this project enhances Uptime Ku
     - [2. Import to Vercel](#2-import-to-vercel)
     - [3. Configure Environment Variables](#3-configure-environment-variables)
     - [4. Update Repository](#4-update-repository)
+  - [Cloudflare Workers Deployment](#cloudflare-workers-deployment)
   - [Local Installation](#local-installation)
 - [Docker Deployment :whale: (Beta)](#docker-deployment-whale-beta)
   - [Using Docker Compose (Recommended)](#using-docker-compose-recommended)
@@ -101,6 +102,20 @@ Go to https://vercel.com/new, select **Import** to import the repository you jus
 
 1. Enter your forked GitHub repository, click the `Sync fork` button.
 2. Click the `Update branch` button, and follow the prompts to automatically synchronize the latest code from this repository.
+
+### Cloudflare Workers Deployment
+
+> [!WARNING]
+> Cloudflare Workers deployment is not supported yet, it is recommended to use [Vercel Deployment](#vercel-deployment-recommended) / Netlify instead.
+>
+> References: [#88](https://github.com/Alice39s/kuma-mieru/issues/88#issuecomment-2919619066)
+
+~~Similar to [Vercel Deployment](#vercel-deployment-recommended), you can deploy to Cloudflare by importing the repository to Cloudflare.~~
+
+~~Note:~~
+
+~~1. Please use `bun run deploy:cloudflare` as the `Build command`, otherwise the deployment will fail.~~
+~~2. Please ensure that the environment variables are configured, please refer to the [Environment Variables](#environment-variables) section for more details.~~
 
 ### Local Installation
 
@@ -185,18 +200,19 @@ Go to https://vercel.com/new, select **Import** to import the repository you jus
    docker compose up -d
    ```
 
-   Add `--build` flag to bypass build cache if needed:
-
-   ```bash
-   docker compose up -d --build
-   ```
-
    Service will be available at `http://0.0.0.0:3883`.
 
 4. **View Logs**
 
    ```bash
    docker compose logs -f
+   ```
+
+5. **Update Image**
+
+   ```bash
+   docker compose pull
+   docker compose up -d
    ```
 
 ### Manual Docker Deployment

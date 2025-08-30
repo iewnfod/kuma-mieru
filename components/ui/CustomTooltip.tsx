@@ -1,5 +1,4 @@
-import { Tooltip as HeroTooltip, type TooltipProps } from '@heroui/react';
-import { cn } from '@heroui/react';
+import { Tooltip as HeroUITooltip, type TooltipProps, cn } from '@heroui/react';
 import type { ReactNode } from 'react';
 
 export interface CustomTooltipProps extends Omit<TooltipProps, 'content'> {
@@ -10,7 +9,7 @@ export interface CustomTooltipProps extends Omit<TooltipProps, 'content'> {
 
 export function CustomTooltip({ content, children, className, ...props }: CustomTooltipProps) {
   return (
-    <HeroTooltip
+    <HeroUITooltip
       content={
         <div
           className={cn(
@@ -26,6 +25,6 @@ export function CustomTooltip({ content, children, className, ...props }: Custom
       {...props}
     >
       {children}
-    </HeroTooltip>
+    </HeroUITooltip>
   );
 }

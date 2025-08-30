@@ -7,7 +7,19 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "ignore": ["node_modules", ".next", "dist", "build", "coverage"]
+    "include": [
+      "app",
+      "components",
+      "lib",
+      "styles",
+      "types",
+      "utils",
+      "config",
+      "hooks",
+      "pages",
+      "public"
+    ],
+    "ignore": ["node_modules", ".next", "dist", "build", "coverage", ".open-next"]
   },
   "formatter": {
     "enabled": true,

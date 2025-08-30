@@ -114,8 +114,8 @@ export function MonitorCard({
         <CardHeader className="grid grid-cols-[1fr_auto] gap-4 items-start">
           <div className="grid grid-rows-[auto_minmax(28px,auto)] gap-2 min-w-0 overflow-hidden">
             <div className="flex items-center gap-2 w-full min-w-0">
-              <StatusIcon className={`text-${chartColor} h-5 w-5 ml-1 flex-shrink-0`} />
-              <h3 className="text-lg font-semibold truncate overflow-ellipsis max-w-full">
+              <StatusIcon className={`text-${chartColor} h-5 w-5 ml-1 shrink-0`} />
+              <h3 className="text-lg font-semibold truncate text-ellipsis max-w-full">
                 {monitor.name}
               </h3>
             </div>
@@ -141,7 +141,7 @@ export function MonitorCard({
             </div>
           </div>
           <div className="flex items-start gap-2">
-            <div className={clsx('flex-shrink-0', isHome ? '' : 'mr-4')}>
+            <div className={clsx('shrink-0', isHome ? '' : 'mr-4')}>
               <ResponsStats value={uptimeData[0].value} fill={uptimeData[0].fill} isHome={isHome} />
             </div>
             {!disableViewToggle && (

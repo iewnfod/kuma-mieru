@@ -155,7 +155,7 @@ export default function AutoRefresh({ onRefresh, interval = 60000, children }: A
           <div className="flex-1">
             <div className="h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden transition-colors duration-300">
               <div
-                className={`h-full bg-gradient-to-r from-blue-500 to-blue-400 transition-all duration-1000 
+                className={`h-full bg-linear-to-r from-blue-500 to-blue-400 transition-all duration-1000 
                   ${isPaused ? 'opacity-50' : 'opacity-100'} 
                   ${isRefreshing ? 'animate-pulse' : ''}`}
                 style={{

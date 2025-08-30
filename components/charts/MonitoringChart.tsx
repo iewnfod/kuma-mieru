@@ -2,7 +2,8 @@ import type { Heartbeat } from '@/types/monitor';
 import { Tab, Tabs } from '@heroui/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Key as ReactKey } from 'react';
 import {
   Area,
   AreaChart,
@@ -147,7 +148,7 @@ export function MonitoringChart({
     };
   }, []);
 
-  const filteredData = React.useMemo(() => {
+  const filteredData = useMemo(() => {
     if (!heartbeats || !Array.isArray(heartbeats)) return [];
 
     const count = countRanges.find((r) => r.key === selectedRange)?.count || 100;
@@ -167,7 +168,7 @@ export function MonitoringChart({
   const minPing = pings.length > 0 ? Math.max(0, Math.min(...pings) - 10) : 0;
   const maxPing = pings.length > 0 ? Math.max(...pings) + 10 : 100;
 
-  const handleRangeChange = useCallback((key: React.Key) => {
+  const handleRangeChange = useCallback((key: ReactKey) => {
     setSelectedRange(key as string);
   }, []);
 

@@ -148,7 +148,7 @@ export default function Home() {
   return (
     <>
       <AutoRefresh onRefresh={handleRefresh} interval={60000}>
-        <div className="mx-auto max-w-screen-2xl px-4 py-8 pt-4">
+        <div className="mx-auto max-w-(--breakpoint-2xl) px-4 py-8 pt-4">
           {/* 状态总览 */}
           <div className="flex justify-between items-center mb-6" suppressHydrationWarning={true}>
             <SystemStatusAlert />

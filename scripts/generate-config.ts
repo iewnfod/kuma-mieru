@@ -5,6 +5,8 @@ import { z } from 'zod';
 import { extractPreloadData } from '../utils/json-processor';
 import { sanitizeJsonString } from '../utils/json-sanitizer';
 
+import 'dotenv/config';
+
 const siteMetaSchema = z.object({
   title: z.string().default('Kuma Mieru'),
   description: z.string().default('A beautiful and modern uptime monitoring dashboard'),
@@ -33,7 +35,13 @@ function getRequiredEnvVar(name: string): string {
 function getBooleanEnvVar(name: string, defaultValue = true): boolean {
   const value = process.env[name];
   if (value === undefined) return defaultValue;
-  return value.toLowerCase() === 'true';
+
+  console.log(`[env] ${name}=${value} (type: ${typeof value})`);
+
+  const lowercaseValue = value.toLowerCase();
+  console.log(`[env] ${name} -> ${lowercaseValue}`);
+
+  return lowercaseValue === 'true';
 }
 
 function getOptionalEnvVar(name: string, defaultValue: string | null = null): string | null {
@@ -45,6 +53,11 @@ async function fetchSiteMeta(baseUrl: string, pageId: string) {
   const customTitle = getOptionalEnvVar('FEATURE_TITLE');
   const customDescription = getOptionalEnvVar('FEATURE_DESCRIPTION');
   const customIcon = getOptionalEnvVar('FEATURE_ICON');
+
+  console.log('[env] [feature_fields]');
+  console.log(`[env] - FEATURE_TITLE: ${customTitle || 'Not set'}`);
+  console.log(`[env] - FEATURE_DESCRIPTION: ${customDescription || 'Not set'}`);
+  console.log(`[env] - FEATURE_ICON: ${customIcon || 'Not set'}`);
 
   const hasAnyCustomValue = customTitle || customDescription || customIcon;
 
@@ -98,6 +111,15 @@ async function fetchSiteMeta(baseUrl: string, pageId: string) {
 
 async function generateConfig() {
   try {
+    console.log('[env] [generate-config]');
+    console.log('[env] [start]');
+
+    for (const key in process.env) {
+      if (key.startsWith('FEATURE_')) {
+        console.log(`[env] - ${key}: ${process.env[key]}`);
+      }
+    }
+
     const baseUrl = getRequiredEnvVar('UPTIME_KUMA_BASE_URL');
     const pageId = getRequiredEnvVar('PAGE_ID');
 
@@ -112,6 +134,10 @@ async function generateConfig() {
     const isShowStarButton = getBooleanEnvVar('FEATURE_SHOW_STAR_BUTTON', true);
     const isShowHomeButton = getBooleanEnvVar('FEATURE_SHOW_HOME_BUTTON', true);
     const homeLink = getOptionalEnvVar('FEATURE_HOME_LINK', '/');
+
+    console.log(`[env] - isEditThisPage: ${isEditThisPage}`);
+    console.log(`[env] - isShowStarButton: ${isShowStarButton}`);
+
     const siteMeta = await fetchSiteMeta(baseUrl, pageId);
 
     const config = configSchema.parse({
@@ -135,6 +161,7 @@ async function generateConfig() {
     fs.writeFileSync(configPath, JSON.stringify(config, null, 2), 'utf-8');
 
     console.log('✅ Configuration file generated successfully!');
+    console.log(`[env] [generated-config.json] ${configPath}`);
   } catch (error) {
     if (error instanceof Error) {
       console.error('❌ Error generating configuration file:', error.message);

@@ -1,7 +1,8 @@
-import { Alert as HeroUIAlert } from '@heroui/react';
+import { Alert as HeroUIAlert } from '@heroui/alert';
 import { clsx } from 'clsx';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useState } from 'react';
+import { extractPlainText, useMarkdown } from '../utils/markdown';
 
 interface AlertProps {
   title: string;
@@ -11,6 +12,7 @@ interface AlertProps {
   className?: string;
   children?: React.ReactNode;
   icon?: React.ReactNode;
+  markdownDescription?: boolean;
 }
 
 export const Alert = ({
@@ -21,8 +23,14 @@ export const Alert = ({
   className,
   children,
   icon,
+  markdownDescription = false,
 }: AlertProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const renderedDescription = useMarkdown(markdownDescription && description ? description : '');
+  const plainTextDescription = markdownDescription
+    ? extractPlainText(description || '', 150)
+    : description;
 
   const handleToggle = () => {
     setIsExpanded(!isExpanded);
@@ -52,9 +60,17 @@ export const Alert = ({
         <div className="flex items-start justify-between w-full">
           <div className="flex-1 mr-2">
             {!isExpanded && <h5 className="text-sm font-medium">{title}</h5>}
-            {!isExpanded && description && (
-              <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-1">{description}</p>
-            )}
+            {!isExpanded &&
+              description &&
+              (markdownDescription ? (
+                <div className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">
+                  {plainTextDescription}
+                </div>
+              ) : (
+                <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-1">
+                  {description}
+                </p>
+              ))}
             <div
               className={clsx(
                 'grid transition-all duration-200 ease-in-out w-full',
@@ -65,9 +81,9 @@ export const Alert = ({
             </div>
           </div>
           {isExpanded ? (
-            <ChevronUp className="h-4 w-4 flex-shrink-0 text-gray-500" />
+            <ChevronUp className="h-4 w-4 shrink-0 text-gray-500" />
           ) : (
-            <ChevronDown className="h-4 w-4 flex-shrink-0 text-gray-500" />
+            <ChevronDown className="h-4 w-4 shrink-0 text-gray-500" />
           )}
         </div>
       </HeroUIAlert>
