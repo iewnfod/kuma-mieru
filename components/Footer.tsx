@@ -17,35 +17,6 @@ export function Footer({ config }: FooterProps) {
       <div className="container mx-auto flex flex-col md:flex-row items-center justify-between">
         <div className="mb-2 md:mb-0 text-base">{footerText}</div>
 
-        {/* <div className="flex items-center gap-1 text-xs">
-          <span>Powered by</span>
-          {showPoweredBy ? (
-            <>
-              <Link
-                href="https://github.com/louislam/uptime-kuma"
-                isExternal
-                className="text-primary text-xs"
-              >
-                Uptime Kuma
-              </Link>
-              <span>&</span>
-              <Link
-                href="https://github.com/alice39s/kuma-mieru"
-                isExternal
-                className="text-primary text-xs"
-              >
-                Kuma Mieru v{packageJson.version}
-              </Link>
-            </>
-          ) : (
-            <>
-              <span>Uptime Kuma</span>
-              <span>&</span>
-              <span>Kuma Mieru v{packageJson.version}</span>
-            </>
-          )}
-        </div>
-      </div> */}
     </footer>
   );
 }
