@@ -17,7 +17,7 @@ export function Footer({ config }: FooterProps) {
       <div className="container mx-auto flex flex-col md:flex-row items-center justify-between">
         <div className="mb-2 md:mb-0 text-base">{footerText}</div>
 
-        <div className="flex items-center gap-1 text-xs">
+        {/* <div className="flex items-center gap-1 text-xs">
           <span>Powered by</span>
           {showPoweredBy ? (
             <>
@@ -45,7 +45,7 @@ export function Footer({ config }: FooterProps) {
             </>
           )}
         </div>
-      </div>
+      </div> */}
     </footer>
   );
 }
