@@ -1,8 +1,11 @@
 'use client';
 
-import { Button, Input, Kbd, Link } from '@heroui/react';
 import {
+  Button,
   Navbar as HeroUINavbar,
+  Input,
+  Kbd,
+  Link,
   NavbarBrand,
   NavbarContent,
   NavbarMenu,
@@ -12,22 +15,18 @@ import { link as linkStyles } from '@heroui/theme';
 import clsx from 'clsx';
 import Image from 'next/image';
 import NextLink from 'next/link';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { GithubIcon, SearchIcon } from '@/components/basic/icons';
 import { ThemeSwitch } from '@/components/basic/theme-switch';
-import { NavbarSkeleton } from '@/components/ui/CommonSkeleton';
-import { apiConfig } from '@/config/api';
-import { siteConfig } from '@/config/site';
+import { resolveIconCandidates, siteConfig } from '@/config/site';
 import { motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useNodeSearch } from '../context/NodeSearchContext';
+import { usePageConfig } from '../context/PageConfigContext';
+import { useConfig } from '../utils/swr';
 import { I18NSwitch } from './i18n-switch';
-
-const isExternalUrl = (url: string) => {
-  return url?.startsWith('http://') || url?.startsWith('https://');
-};
 
 export const Navbar = () => {
   const t = useTranslations();
@@ -47,9 +46,26 @@ export const Navbar = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  if (!apiConfig) {
-    return <NavbarSkeleton />;
-  }
+  const pageConfig = usePageConfig();
+  const { config: globalConfig } = useConfig();
+
+  const resolvedTitle = globalConfig?.config.title || pageConfig.siteMeta.title;
+
+  const mergedIconSources = useMemo(() => {
+    const sources = [...pageConfig.siteMeta.iconCandidates];
+    const runtimeIcon = globalConfig?.config.icon;
+    if (runtimeIcon) {
+      sources.push(runtimeIcon);
+    }
+    return sources;
+  }, [pageConfig.siteMeta.iconCandidates, globalConfig?.config.icon]);
+
+  const resolvedIconCandidates = useMemo(
+    () => resolveIconCandidates(mergedIconSources),
+    [mergedIconSources],
+  );
+
+  const homeHref = pageConfig.pageId === pageConfig.defaultPageId ? '/' : `/${pageConfig.pageId}`;
 
   const handleSearchChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -114,46 +130,42 @@ export const Navbar = () => {
     </Button>
   );
 
-  const getIconUrl = () => {
-    // if (apiConfig.siteMeta.icon) {
-    //   return isExternalUrl(apiConfig.siteMeta.icon)
-    //     ? apiConfig.siteMeta.icon
-    //     : new URL(apiConfig.siteMeta.icon, apiConfig.baseUrl).toString();
-    // }
-    console.log(siteConfig.icon);
-    return siteConfig.icon;
-  };
+  const getIconUrl = () => resolvedIconCandidates[0] || siteConfig.icon || '/icon.svg';
 
   return (
     <HeroUINavbar maxWidth="xl" position="static">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand className="gap-3 max-w-fit">
-          <NextLink className="flex justify-start items-center gap-2" href="/">
-            <img src={getIconUrl() ?? '/icon.svg'} alt="" width={34} height={34} loading="eager" />
-            <p className="font-bold text-inherit">{apiConfig.siteMeta.title}</p>
+          <NextLink className="flex justify-start items-center gap-1" href={homeHref}>
+            <Image
+              src={getIconUrl() || '/icon.svg'}
+              alt={`${resolvedTitle} logo`}
+              width={34}
+              height={34}
+            />
+            <p className="font-bold text-inherit">{resolvedTitle}</p>
           </NextLink>
         </NavbarBrand>
         <nav aria-label={t('navbar.main')}>
           <ul className="hidden lg:flex gap-4 justify-start ml-2">
-            {siteConfig.navItems.map((item) => (
-              <>
-                {item.show ? (
-                  <li key={item.href}>
-                    <NextLink
-                      className={clsx(
-                        linkStyles({ color: 'foreground' }),
-                        'data-[active=true]:text-primary data-[active=true]:font-medium',
-                      )}
-                      color="foreground"
-                      href={item.href}
-                      target={item.external ? '_blank' : '_self'}
-                    >
-                      {t(item.label)}
-                    </NextLink>
-                  </li>
-                ) : null}
-              </>
-            ))}
+            {siteConfig.navItems.map((item) => {
+              const targetHref = item.href === '/' ? homeHref : item.href;
+              return (
+                <li key={item.href}>
+                  <NextLink
+                    className={clsx(
+                      linkStyles({ color: 'foreground' }),
+                      'data-[active=true]:text-primary data-[active=true]:font-medium',
+                    )}
+                    color="foreground"
+                    href={targetHref}
+                    target={item.external ? '_blank' : '_self'}
+                  >
+                    {t(item.label)}
+                  </NextLink>
+                </li>
+              );
+            })}
           </ul>
         </nav>
       </NavbarContent>
@@ -170,7 +182,7 @@ export const Navbar = () => {
             <li className="hidden lg:block">
               <div className="flex flex-col">{searchInput}</div>
             </li>
-            <li className="hidden sm:block">{apiConfig.isShowStarButton && starButton}</li>
+            <li className="hidden sm:block">{pageConfig.isShowStarButton && starButton}</li>
           </ul>
         </nav>
       </NavbarContent>
@@ -207,28 +219,32 @@ export const Navbar = () => {
       </NavbarContent>
 
       <NavbarMenu className="z-60">
-        {apiConfig.isShowStarButton ?? starButton}
+        {pageConfig.isShowStarButton && starButton}
         <div className="flex flex-col gap-4">{searchInput}</div>
         <nav aria-label={t('navbar.mobileNav')}>
           <ul className="mx-4 mt-4 flex flex-col gap-2">
-            {siteConfig.navItems.map((item, index) => (
-              <li key={`${item}-${index}`}>
-                <Link
-                  color={
-                    index === 2
-                      ? 'primary'
-                      : index === siteConfig.navItems.length - 1
-                        ? 'danger'
-                        : 'foreground'
-                  }
-                  href={item.href}
-                  target={item.external ? '_blank' : '_self'}
-                  size="lg"
-                >
-                  {t(item.label)}
-                </Link>
-              </li>
-            ))}
+            {siteConfig.navItems.map((item, index) => {
+              const targetHref = item.href === '/' ? homeHref : item.href;
+
+              return (
+                <li key={`${item}-${index}`}>
+                  <Link
+                    color={
+                      index === 2
+                        ? 'primary'
+                        : index === siteConfig.navItems.length - 1
+                          ? 'danger'
+                          : 'foreground'
+                    }
+                    href={targetHref}
+                    target={item.external ? '_blank' : '_self'}
+                    size="lg"
+                  >
+                    {t(item.label)}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </nav>
       </NavbarMenu>
