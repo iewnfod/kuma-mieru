@@ -24,10 +24,6 @@ interface RefreshButtonProps {
   children: ReactNode;
 }
 
-interface HandleRefreshOptions {
-  showToast?: boolean;
-}
-
 interface ControlButtonProps {
   isPaused: boolean;
   onClick: () => void;
@@ -86,41 +82,36 @@ export default function AutoRefresh({ onRefresh, interval = 60000, children }: A
   const [lastRefreshTime, setLastRefreshTime] = useState<number>(Date.now());
   const [showRefreshAnimation, setShowRefreshAnimation] = useState<boolean>(false);
 
-  const handleRefresh = useCallback(
-    async ({ showToast = true }: HandleRefreshOptions = {}) => {
-      if (isRefreshing) return;
+  const handleRefresh = useCallback(async () => {
+    if (isRefreshing) return;
 
-      setIsRefreshing(true);
-      setShowRefreshAnimation(true);
+    setIsRefreshing(true);
+    setShowRefreshAnimation(true);
 
-      try {
-        const toastId = showToast ? toast.loading(t('refreshing')) : undefined;
+    try {
+      const toastId = toast.loading(t('refreshing'));
 
-        const result = onRefresh();
-        if (result instanceof Promise) {
-          await result;
-        }
-
-        if (showToast) {
-          toast.success(t('refreshSuccess'), {
-            id: toastId,
-          });
-        }
-
-        setLastRefreshTime(dayjs().valueOf());
-      } catch (error) {
-        console.error(t('error.refresh'), ':', error);
-        toast.error(
-          `${t('error.refresh')}: ${error instanceof Error ? error.message : t('error.unknown')}`,
-        );
-      } finally {
-        setIsRefreshing(false);
-        setTimeLeft(interval);
-        setTimeout(() => setShowRefreshAnimation(false), 500);
+      const result = onRefresh();
+      if (result instanceof Promise) {
+        await result;
       }
-    },
-    [isRefreshing, onRefresh, interval, t],
-  );
+
+      toast.success(t('refreshSuccess'), {
+        id: toastId,
+      });
+
+      setLastRefreshTime(dayjs().valueOf());
+    } catch (error) {
+      console.error(t('error.refresh'), ':', error);
+      toast.error(
+        `${t('error.refresh')}: ${error instanceof Error ? error.message : t('error.unknown')}`,
+      );
+    } finally {
+      setIsRefreshing(false);
+      setTimeLeft(interval);
+      setTimeout(() => setShowRefreshAnimation(false), 500);
+    }
+  }, [isRefreshing, onRefresh, interval, t]);
 
   const handleTogglePause = useCallback(() => {
     const newPausedState = !isPaused;
@@ -133,21 +124,13 @@ export default function AutoRefresh({ onRefresh, interval = 60000, children }: A
     }
   }, [isPaused, t]);
 
-  const handleSilentRefresh = useCallback(
-    () => handleRefresh({ showToast: false }),
-    [handleRefresh],
-  );
-  const handleManualRefresh = useCallback(() => {
-    void handleRefresh();
-  }, [handleRefresh]);
-
   useEffect(() => {
     if (isPaused) return;
 
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1000) {
-          void handleSilentRefresh();
+          handleRefresh();
           return interval;
         }
         return prev - 1000;
@@ -155,7 +138,7 @@ export default function AutoRefresh({ onRefresh, interval = 60000, children }: A
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [isPaused, interval, handleSilentRefresh]);
+  }, [isPaused, interval, handleRefresh]);
 
   const progress = (timeLeft / interval) * 100;
 
@@ -185,7 +168,7 @@ export default function AutoRefresh({ onRefresh, interval = 60000, children }: A
 
           <div className="flex items-center gap-2">
             <ControlButton isPaused={isPaused} onClick={handleTogglePause} />
-            <RefreshButton isRefreshing={isRefreshing} onClick={handleManualRefresh}>
+            <RefreshButton isRefreshing={isRefreshing} onClick={handleRefresh}>
               {t('refreshNow')}
             </RefreshButton>
           </div>

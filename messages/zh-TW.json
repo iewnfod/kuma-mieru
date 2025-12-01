@@ -64,8 +64,7 @@
     "toolbar": "工具欄",
     "mobileToolbar": "行動版工具列",
     "mobileNav": "行動版主導航列",
-    "search": "搜尋",
-    "pageTabs": "狀態頁切換"
+    "search": "搜尋"
   },
   "mode": {
     "light": "淺色模式",

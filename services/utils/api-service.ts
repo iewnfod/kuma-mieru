@@ -1,3 +1,4 @@
+import { apiConfig } from '@/config/api';
 import { customFetchOptions } from './common';
 import { customFetch } from './fetch';
 

@@ -10,8 +10,6 @@ import type { ThemeProviderProps } from 'next-themes';
 
 import { NodeSearchProvider } from '@/components/context/NodeSearchContext';
 import { HeroUIProvider } from '@heroui/react';
-import { NextIntlClientProvider } from 'next-intl';
-import type { AbstractIntlMessages } from 'next-intl';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { useRouter } from 'next/navigation';
 import type * as React from 'react';
@@ -19,8 +17,6 @@ import type * as React from 'react';
 export interface ProvidersProps {
   children: React.ReactNode;
   themeProps?: ThemeProviderProps;
-  locale: string;
-  messages: AbstractIntlMessages;
 }
 
 declare module '@react-types/shared' {
@@ -29,16 +25,14 @@ declare module '@react-types/shared' {
   }
 }
 
-export function Providers({ children, themeProps, locale, messages }: ProvidersProps) {
+export function Providers({ children, themeProps }: ProvidersProps) {
   const router = useRouter();
 
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
-      <HeroUIProvider navigate={router.push}>
-        <NextThemesProvider {...themeProps}>
-          <NodeSearchProvider>{children}</NodeSearchProvider>
-        </NextThemesProvider>
-      </HeroUIProvider>
-    </NextIntlClientProvider>
+    <HeroUIProvider navigate={router.push}>
+      <NextThemesProvider {...themeProps}>
+        <NodeSearchProvider>{children}</NodeSearchProvider>
+      </NextThemesProvider>
+    </HeroUIProvider>
   );
 }

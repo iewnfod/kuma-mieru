@@ -11,7 +11,6 @@ import { MonitorCardLite } from './MonitorCardLite';
 import { MonitoringChart } from './charts/MonitoringChart';
 import { ResponsStats } from './charts/ResponsStats';
 import { StatusBlockIndicator } from './charts/StatusBlockIndicator';
-import { usePageConfig } from './context/PageConfigContext';
 
 const VIEW_PREFERENCE_KEY = 'view-preference-monitor-card';
 
@@ -24,7 +23,6 @@ export function MonitorCard({
   disableViewToggle = false,
 }: MonitorCardProps) {
   const router = useRouter();
-  const pageConfig = usePageConfig();
   const [isSafari, setIsSafari] = useState(false);
   const [localLiteView, setLocalLiteView] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -74,8 +72,7 @@ export function MonitorCard({
 
   const handleClick = () => {
     if (isHome) {
-      const detailPath = `/monitor/${monitor.id}?pageId=${encodeURIComponent(pageConfig.pageId)}`;
-      router.push(detailPath);
+      router.push(`/monitor/${monitor.id}`);
     }
   };
 
