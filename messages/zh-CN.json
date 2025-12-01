@@ -64,8 +64,7 @@
     "toolbar": "工具栏",
     "mobileToolbar": "移动端工具栏",
     "mobileNav": "移动端主导航栏",
-    "search": "搜索",
-    "pageTabs": "状态页切换"
+    "search": "搜索"
   },
   "mode": {
     "light": "浅色模式",

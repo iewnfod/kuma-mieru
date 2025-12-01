@@ -6,6 +6,3 @@ node_modules
 *.md
 coverage
 !config/
-Dockerfile
-docker-compose.yml
-docker-compose.*.yml

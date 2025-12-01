@@ -8,56 +8,14 @@ import bundleAnalyzer from '@next/bundle-analyzer';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const defaultProtocols = ['https', 'http'];
-
-const normalizePatterns = (patterns) => {
-  const seen = new Set();
-
-  return patterns.filter((pattern) => {
-    if (!pattern?.hostname || !pattern?.protocol) return false;
-
-    const key = `${pattern.protocol}://${pattern.hostname}`;
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
-};
-
-const getImageRemotePatterns = () => {
+const getImageDomains = () => {
   try {
     const configPath = join(process.cwd(), 'config', 'generated', 'image-domains.json');
     const config = JSON.parse(readFileSync(configPath, 'utf8'));
-
-    if (Array.isArray(config?.patterns) && config.patterns.length > 0) {
-      const patterns = config.patterns.flatMap(({ hostname, protocols }) => {
-        if (!hostname) return [];
-
-        const resolvedProtocols = Array.isArray(protocols) && protocols.length > 0 ? protocols : defaultProtocols;
-
-        return resolvedProtocols.map((protocol) => ({ hostname, protocol }));
-      });
-
-      const normalized = normalizePatterns(patterns);
-      if (normalized.length > 0) {
-        return normalized;
-      }
-    }
-
-    if (Array.isArray(config?.domains) && config.domains.length > 0) {
-      const patterns = config.domains.flatMap((hostname) =>
-        defaultProtocols.map((protocol) => ({ hostname, protocol })),
-      );
-
-      const normalized = normalizePatterns(patterns);
-      if (normalized.length > 0) {
-        return normalized;
-      }
-    }
+    return config.domains;
   } catch (e) {
-    // Fallback to defaults below
+    return ['*'];
   }
-
-  return normalizePatterns(defaultProtocols.map((protocol) => ({ hostname: '*', protocol })));
 };
 
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -69,7 +27,10 @@ const baseConfig = {
   reactStrictMode: true,
 
   images: {
-    remotePatterns: getImageRemotePatterns(),
+    remotePatterns: getImageDomains().map((hostname) => ({
+      protocol: 'https',
+      hostname,
+    })),
     formats: ['image/avif', 'image/webp'],
     dangerouslyAllowSVG: true,
   },
