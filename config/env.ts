@@ -24,8 +24,6 @@ const configSchema = z.object({
   isPlaceholder: z.boolean(),
   isEditThisPage: z.boolean(),
   isShowStarButton: z.boolean(),
-  isShowHomeButton: z.boolean(),
-  homeLink: z.string(),
 });
 
 // 确保配置符合schema
