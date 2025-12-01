@@ -109,11 +109,6 @@ const configGroups: ConfigGroup[] = [
         value: generatedConfig?.isShowStarButton,
         defaultValue: 'true (Default)',
       },
-      {
-        name: 'FEATURE_SHOW_HOME_BUTTON',
-        value: process.env.FEATURE_SHOW_HOME_BUTTON,
-        defaultValue: 'true (Default)',
-      },
     ],
   },
   {
@@ -134,11 +129,6 @@ const configGroups: ConfigGroup[] = [
       {
         name: 'FEATURE_ICON',
         value: generatedConfig?.siteMeta?.icon,
-        defaultValue: 'Using Default',
-      },
-      {
-        name: 'FEATURE_HOME_LINK',
-        value: process.env.FEATURE_HOME_LINK,
         defaultValue: 'Using Default',
       },
     ],

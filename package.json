@@ -12,7 +12,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bun run generate && bun run lint:fix && next dev --port 3881",
+    "dev": "bun run generate && bun run lint:fix && next dev --turbopack --port 3881",
     "start": "bun run generate && bun ./scripts/init-start.ts && bun .next/standalone/server.js",
     "start:docker": "bun run generate && bun run scripts/docker-init.ts && bun ./server.js",
     "build": "bun run generate && next build",
@@ -82,7 +82,9 @@
     "typescript": "^5.9.3",
     "wrangler": "^4.45.3"
   },
-  "trustedDependencies": ["@biomejs/biome", "@heroui/shared-utils",
+  "trustedDependencies": [
+    "@biomejs/biome",
+    "@heroui/shared-utils",
     "esbuild",
     "sharp",
     "workerd"

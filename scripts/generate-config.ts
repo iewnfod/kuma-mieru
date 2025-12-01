@@ -165,22 +165,22 @@ async function fetchSiteMeta(baseUrl: string, pageId: string) {
       throw new Error(`Failed to fetch site meta: ${response.status} ${response.statusText}`);
     }
 
-        const html = await response.text();
-        const $ = cheerio.load(html);
-        const { payload, source } = getPreloadPayload($);
-        let preloadSource = payload;
-        let preloadData: PreloadData | null = null;
+    const html = await response.text();
+    const $ = cheerio.load(html);
+    const { payload, source } = getPreloadPayload($);
+    let preloadSource = payload;
+    let preloadData: PreloadData | null = null;
 
-        if (!preloadSource) {
-            const legacyScript = $('script:contains("window.preloadData")').text();
-            if (legacyScript) {
-                const match = legacyScript.match(/window\.preloadData\s*=\s*({[\s\S]*?});/);
-                if (match && match[1]) {
-                    preloadSource = match[1];
-                    console.log('Fallback to window.preloadData script for site meta extraction');
-                }
-            }
+    if (!preloadSource) {
+      const legacyScript = $('script:contains("window.preloadData")').text();
+      if (legacyScript) {
+        const match = legacyScript.match(/window\.preloadData\s*=\s*({[\s\S]*?});/);
+        if (match && match[1]) {
+          preloadSource = match[1];
+          console.log('Fallback to window.preloadData script for site meta extraction');
         }
+      }
+    }
 
     if (preloadSource) {
       if (source === 'data-json') {
@@ -247,87 +247,87 @@ function parsePageIds(rawValue: string): string[] {
 }
 
 async function generateConfig() {
+  try {
+    console.log('[env] [generate-config]');
+    console.log('[env] [start]');
+
+    for (const key in process.env) {
+      if (key.startsWith('FEATURE_')) {
+        console.log(`[env] - ${key}: ${process.env[key]}`);
+      }
+    }
+
+    const baseUrl = getRequiredEnvVar('UPTIME_KUMA_BASE_URL');
+    const rawPageIds = getRequiredEnvVar('PAGE_ID');
+    const pageIds = parsePageIds(rawPageIds);
+
+    if (pageIds.length === 0) {
+      throw new Error('PAGE_ID must contain at least one status page identifier');
+    }
+
+    const defaultPageId = pageIds[0];
+
+    // 获取并验证配置项
     try {
-        console.log('[env] [generate-config]');
-        console.log('[env] [start]');
+      new URL(baseUrl);
+    } catch {
+      throw new Error('UPTIME_KUMA_BASE_URL must be a valid URL');
+    }
 
-        for (const key in process.env) {
-            if (key.startsWith('FEATURE_')) {
-                console.log(`[env] - ${key}: ${process.env[key]}`);
-            }
-        }
+    const isEditThisPage = getBooleanEnvVar('FEATURE_EDIT_THIS_PAGE', false);
+    const isShowStarButton = getBooleanEnvVar('FEATURE_SHOW_STAR_BUTTON', true);
 
-        const baseUrl = getRequiredEnvVar('UPTIME_KUMA_BASE_URL');
-        const rawPageIds = getRequiredEnvVar('PAGE_ID');
-        const pageIds = parsePageIds(rawPageIds);
+    console.log(`[env] - isEditThisPage: ${isEditThisPage}`);
+    console.log(`[env] - isShowStarButton: ${isShowStarButton}`);
 
-        if (pageIds.length === 0) {
-            throw new Error('PAGE_ID must contain at least one status page identifier');
-        }
+    const pageConfigEntries = [] as Array<{ id: string; siteMeta: z.infer<typeof siteMetaSchema> }>;
 
-        const defaultPageId = pageIds[0];
+    for (const id of pageIds) {
+      try {
+        const siteMeta = await fetchSiteMeta(baseUrl, id);
+        pageConfigEntries.push({ id, siteMeta });
+      } catch (error) {
+        console.error(`Failed to fetch site meta for page "${id}":`, error);
+        pageConfigEntries.push({ id, siteMeta: siteMetaSchema.parse({}) });
+      }
+    }
 
-        // 获取并验证配置项
-        try {
-            new URL(baseUrl);
-        } catch {
-            throw new Error('UPTIME_KUMA_BASE_URL must be a valid URL');
-        }
+    const defaultSiteMeta = pageConfigEntries.find((entry) => entry.id === defaultPageId)?.siteMeta;
 
-        const isEditThisPage = getBooleanEnvVar('FEATURE_EDIT_THIS_PAGE', false);
-        const isShowStarButton = getBooleanEnvVar('FEATURE_SHOW_STAR_BUTTON', true);
+    if (!defaultSiteMeta) {
+      throw new Error(`Unable to resolve site metadata for default page "${defaultPageId}"`);
+    }
 
-        console.log(`[env] - isEditThisPage: ${isEditThisPage}`);
-        console.log(`[env] - isShowStarButton: ${isShowStarButton}`);
+    const config = configSchema.parse({
+      baseUrl,
+      pageId: defaultPageId,
+      pageIds,
+      pages: pageConfigEntries,
+      siteMeta: defaultSiteMeta,
+      isPlaceholder: false,
+      isEditThisPage,
+      isShowStarButton,
+    });
 
-        const pageConfigEntries = [] as Array<{ id: string; siteMeta: z.infer<typeof siteMetaSchema> }>;
+    const configPath = path.join(process.cwd(), 'config', 'generated-config.json');
 
-        for (const id of pageIds) {
-            try {
-                const siteMeta = await fetchSiteMeta(baseUrl, id);
-                pageConfigEntries.push({ id, siteMeta });
-            } catch (error) {
-                console.error(`Failed to fetch site meta for page "${id}":`, error);
-                pageConfigEntries.push({ id, siteMeta: siteMetaSchema.parse({}) });
-            }
-        }
-
-        const defaultSiteMeta = pageConfigEntries.find((entry) => entry.id === defaultPageId)?.siteMeta;
-
-        if (!defaultSiteMeta) {
-            throw new Error(`Unable to resolve site metadata for default page "${defaultPageId}"`);
-        }
-
-        const config = configSchema.parse({
-            baseUrl,
-            pageId: defaultPageId,
-            pageIds,
-            pages: pageConfigEntries,
-            siteMeta: defaultSiteMeta,
-            isPlaceholder: false,
-            isEditThisPage,
-            isShowStarButton,
-        });
-
-        const configPath = path.join(process.cwd(), 'config', 'generated-config.json');
-
-        const configDir = path.dirname(configPath);
-        if (!fs.existsSync(configDir)) {
-            fs.mkdirSync(configDir, { recursive: true });
-        }
+    const configDir = path.dirname(configPath);
+    if (!fs.existsSync(configDir)) {
+      fs.mkdirSync(configDir, { recursive: true });
+    }
 
     fs.writeFileSync(configPath, JSON.stringify(config, null, 2), 'utf-8');
 
-        console.log('✅ Configuration file generated successfully!');
-        console.log(`[env] [generated-config.json] ${configPath}`);
-    } catch (error) {
-        if (error instanceof Error) {
-            console.error('❌ Error generating configuration file:', error.message);
-        } else {
-            console.error('❌ Unknown error generating configuration file');
-        }
-        process.exit(1);
+    console.log('✅ Configuration file generated successfully!');
+    console.log(`[env] [generated-config.json] ${configPath}`);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error('❌ Error generating configuration file:', error.message);
+    } else {
+      console.error('❌ Unknown error generating configuration file');
     }
+    process.exit(1);
+  }
 }
 
 generateConfig().catch(console.error);
