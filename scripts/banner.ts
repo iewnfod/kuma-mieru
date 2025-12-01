@@ -86,7 +86,11 @@ const configGroups: ConfigGroup[] = [
       },
       {
         name: 'PAGE_ID',
-        value: generatedConfig?.pageId || process.env.PAGE_ID,
+        value: generatedConfig?.pageId || generatedConfig?.pageIds?.[0] || process.env.PAGE_ID,
+      },
+      {
+        name: 'PAGE_IDS',
+        value: generatedConfig?.pageIds?.join(', ') || process.env.PAGE_ID,
       },
     ],
   },
@@ -103,11 +107,6 @@ const configGroups: ConfigGroup[] = [
       {
         name: 'FEATURE_SHOW_STAR_BUTTON',
         value: generatedConfig?.isShowStarButton,
-        defaultValue: 'true (Default)',
-      },
-      {
-        name: 'FEATURE_SHOW_HOME_BUTTON',
-        value: process.env.FEATURE_SHOW_HOME_BUTTON,
         defaultValue: 'true (Default)',
       },
     ],
@@ -130,11 +129,6 @@ const configGroups: ConfigGroup[] = [
       {
         name: 'FEATURE_ICON',
         value: generatedConfig?.siteMeta?.icon,
-        defaultValue: 'Using Default',
-      },
-      {
-        name: 'FEATURE_HOME_LINK',
-        value: process.env.FEATURE_HOME_LINK,
         defaultValue: 'Using Default',
       },
     ],

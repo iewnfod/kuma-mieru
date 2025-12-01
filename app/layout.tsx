@@ -2,24 +2,24 @@ import '@/styles/globals.css';
 import { clsx } from 'clsx';
 import type { Metadata, Viewport } from 'next';
 
-import { Footer } from '@/components/Footer';
 import Analytics from '@/components/basic/google-analytics';
-import { Navbar } from '@/components/basic/navbar';
 import { fontMono, fontSans } from '@/config/fonts';
 import { siteConfig } from '@/config/site';
 import packageJson from '@/package.json';
 import { getGlobalConfig } from '@/services/config.server';
-import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import { Providers } from './providers';
 
 import { Toaster } from 'sonner';
 
 export const metadata: Metadata = {
-  title: siteConfig.name ?? 'Kuma Mieru',
-  description: siteConfig.description ?? 'Kuma Mieru',
+  title: {
+    default: 'Kuma Mieru',
+    template: siteConfig.name ? `%s - ${siteConfig.name}` : '%s - Kuma Mieru',
+  },
+  description: siteConfig.description || 'Kuma Mieru',
   icons: {
-    icon: siteConfig.icon,
+    icon: siteConfig.iconCandidates,
   },
   generator: `https://github.com/Alice39s/kuma-mieru v${packageJson.version}`,
   formatDetection: {
@@ -48,6 +48,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html suppressHydrationWarning={true} lang={locale}>
+      <head />
       <body
         className={clsx(
           'min-h-screen bg-background font-sans antialiased',
@@ -56,16 +57,16 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         )}
       >
         {googleAnalyticsId && <Analytics id={googleAnalyticsId} />}
-        <NextIntlClientProvider messages={messages}>
-          <Providers themeProps={{ attribute: 'class', defaultTheme: theme }}>
-            <div className="relative flex flex-col h-screen">
-              <Navbar />
-              <main className="container mx-auto max-w-7xl pt-4 px-6 grow">{children}</main>
-              <Footer config={config} />
-              <Toaster position="top-center" richColors />
-            </div>
-          </Providers>
-        </NextIntlClientProvider>
+        <Providers
+          locale={locale}
+          messages={messages}
+          themeProps={{ attribute: 'class', defaultTheme: theme }}
+        >
+          <div className="min-h-screen bg-background">
+            {children}
+            <Toaster position="top-center" richColors />
+          </div>
+        </Providers>
       </body>
     </html>
   );

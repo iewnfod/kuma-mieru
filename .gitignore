@@ -43,6 +43,7 @@ next-env.d.ts
 !.env.example
 
 generated-*.json
+generated/
 
 dist/
 .open-next/
@@ -50,5 +51,7 @@ dist/
 *.lock
 !bun.lock
 
-@*.md
-p*.md
+*.md
+!CODE_OF_CONDUCT.md
+!CONTRIBUTING.md
+!README*

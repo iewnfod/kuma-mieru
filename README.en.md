@@ -1,7 +1,7 @@
 # Kuma Mieru :traffic_light:
 
 **Kuma Mieru - A Modern Third-Party Monitoring Dashboard for Uptime Kuma**  
-Built with Next.js 15, TypeScript, and Recharts, this project enhances Uptime Kuma's public status pages with intuitive visualizations and latency charts.
+Built with Next.js 16, TypeScript, and Recharts, this project enhances Uptime Kuma's public status pages with intuitive visualizations and latency charts.
 
 [中文版](README.md) | English Version
 
@@ -11,20 +11,21 @@ Built with Next.js 15, TypeScript, and Recharts, this project enhances Uptime Ku
 > please note to modify the `Display Timezone` (Display Timezone) to `UTC+0` time zone in the _Uptime Kuma_ settings.
 
 <div align="center">
-
 <!-- Release -->
 
-[![Release](https://img.shields.io/github/v/release/Alice39s/kuma-mieru?style=flat-square&color=blue&label=Release)](https://github.com/Alice39s/kuma-mieru/releases/latest) [![License](https://img.shields.io/github/license/Alice39s/kuma-mieru?style=flat-square&color=blue)](https://github.com/Alice39s/kuma-mieru/blob/main/LICENSE) [![Release](https://img.shields.io/github/actions/workflow/status/Alice39s/kuma-mieru/release.yml?branch=main&style=flat-square&logo=github&label=Release)](https://github.com/Alice39s/kuma-mieru/actions/workflows/release.yml) [![Docker](https://img.shields.io/github/actions/workflow/status/Alice39s/kuma-mieru/docker-build.yml?branch=main&style=flat-square&logo=docker&label=Docker)](https://github.com/Alice39s/kuma-mieru/actions/workflows/docker-build.yml)
-
-<!-- Tech Stack -->
-
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![React](https://img.shields.io/badge/React-v19-387CA0?style=flat-square&logo=react&logoColor=white)](https://reactjs.org/) [![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js&logoColor=white)](https://nextjs.org/)
-
-[![Bun](https://img.shields.io/badge/Bun-Package%20Manager-14151A?style=flat-square&logo=bun&logoColor=white)](https://bun.sh/) [![Recharts](https://img.shields.io/badge/Recharts-Charting%20Library-8884d8?style=flat-square&logo=recharts&logoColor=white)](https://recharts.org/en-US/) [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-v4-4EB9FA?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Release](https://img.shields.io/github/v/release/Alice39s/kuma-mieru?style=flat-square&color=blue&label=Release)](https://github.com/Alice39s/kuma-mieru/releases/latest) [![License](https://img.shields.io/github/license/Alice39s/kuma-mieru?style=flat-square&color=blue)](https://github.com/Alice39s/kuma-mieru/blob/main/LICENSE)  
+[![Workflow](https://img.shields.io/github/actions/workflow/status/Alice39s/kuma-mieru/release.yml?branch=main&style=flat-square&logo=github&label=Workflow)](https://github.com/Alice39s/kuma-mieru/actions/workflows/release.yml) [![Docker](https://img.shields.io/github/actions/workflow/status/Alice39s/kuma-mieru/docker-build.yml?branch=main&style=flat-square&logo=docker&label=Docker)](https://github.com/Alice39s/kuma-mieru/actions/workflows/docker-build.yml)
 
 <!-- Project Data -->
 
 [![Stars](https://img.shields.io/github/stars/Alice39s/kuma-mieru?style=flat-square&logo=github&color=yellow&label=Stars)](https://github.com/Alice39s/kuma-mieru/stargazers) [![Forks](https://img.shields.io/github/forks/Alice39s/kuma-mieru?style=flat-square&logo=github&color=yellow&label=Forks)](https://github.com/Alice39s/kuma-mieru/network/members)
+
+<!-- Tech Stack -->
+
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![React](https://img.shields.io/badge/React-v19-387CA0?style=flat-square&logo=react&logoColor=white)](https://reactjs.org/) [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js&logoColor=white)](https://nextjs.org/)  
+[![Bun](https://img.shields.io/badge/Bun-Package%20Manager-14151A?style=flat-square&logo=bun&logoColor=white)](https://bun.sh/) [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-v4-4EB9FA?style=flat-square&logo=tailwind-css&logoColor=white)](https://v4.tailwindcss.com/)
+
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Alice39s/kuma-mieru)
 
 </div>
 
@@ -84,7 +85,7 @@ Built with Next.js 15, TypeScript, and Recharts, this project enhances Uptime Ku
 
 #### 2. Import to Vercel
 
-Go to https://vercel.com/new, select **Import** to import the repository you just forked.
+Go to <https://vercel.com/new>, select **Import** to import the repository you just forked.
 
 #### 3. Configure Environment Variables
 
@@ -164,6 +165,7 @@ Go to https://vercel.com/new, select **Import** to import the repository you jus
    Access at: [http://localhost:3883](http://localhost:3883)
 
 5. **Production Build**
+
    ```bash
    bun run build
    bun run start
@@ -249,16 +251,14 @@ First, assume your Uptime Kuma status page URL is `https://example.kuma-mieru.in
 Then, the environment variables you need to configure are as follows:
 
 | Variable Name            | Required | Description                             | Example                            |
-| ------------------------ |----------|-----------------------------------------| ---------------------------------- |
-| UPTIME_KUMA_BASE_URL     | Yes      | Base URL of Uptime Kuma instance        | https://example.kuma-mieru.invalid |
-| PAGE_ID                  | Yes      | Status page path of Uptime Kuma         | test1                              |
+| ------------------------ | -------- | --------------------------------------- | ---------------------------------- |
+| UPTIME_KUMA_BASE_URL     | Yes      | Base URL of Uptime Kuma instance        | <https://example.kuma-mieru.invalid> |
+| PAGE_ID                  | Yes      | Status page path of Uptime Kuma. Supports comma-separated multiple IDs with the first value as the default page | default,status-asia |
 | FEATURE_EDIT_THIS_PAGE   | No       | Whether to show "Edit This Page" button | false                              |
 | FEATURE_SHOW_STAR_BUTTON | No       | Whether to show "Star on Github" button | true                               |
-| FEATURE_SHOW_HOME_BUTTON | No       | Whether to show "Home" button           | true                               |
 | FEATURE_TITLE            | No       | Custom page title                       | My Monitoring Dashboard            |
 | FEATURE_DESCRIPTION      | No       | Custom page description                 | A beautiful monitoring dashboard   |
 | FEATURE_ICON             | No       | Custom page icon URL                    | /icon.svg                          |
-| FEATURE_HOME_LINK        | No       | Custom "Home" button URL                | /                                          |
 
 ### Health Check
 

@@ -1,13 +1,25 @@
-import { apiConfig } from '@/config/api';
-import type { GlobalConfig, Maintenance } from '@/types/config';
+import { getConfig } from '@/config/api';
+import type { Config, GlobalConfig, Maintenance } from '@/types/config';
+import type { PageTabMeta } from '@/types/page';
 import { ConfigError } from '@/utils/errors';
 import { extractPreloadData } from '@/utils/json-processor';
 import { sanitizeJsonString } from '@/utils/json-sanitizer';
+import { fetchPreloadDataFromApi, getPreloadPayload } from '@/utils/preload-data';
 import * as cheerio from 'cheerio';
 import { cache } from 'react';
 import { ApiDataError, logApiError } from './utils/api-service';
 import { customFetchOptions, ensureUTCTimezone } from './utils/common';
 import { customFetch } from './utils/fetch';
+
+function resolvePageConfig(pageId?: string): Config {
+  const config = getConfig(pageId);
+
+  if (!config) {
+    throw new ConfigError(`Invalid status page id: ${pageId ?? 'undefined'}`);
+  }
+
+  return config;
+}
 
 function processMaintenanceData(maintenanceList: Maintenance[]): Maintenance[] {
   return maintenanceList.map((maintenance) => {
@@ -46,9 +58,11 @@ function processMaintenanceData(maintenanceList: Maintenance[]): Maintenance[] {
  * 获取维护计划数据
  * @returns 处理后的维护计划数据
  */
-export async function getMaintenanceData() {
+export async function getMaintenanceData(pageId?: string) {
+  const config = resolvePageConfig(pageId);
+
   try {
-    const preloadData = await getPreloadData();
+    const preloadData = await getPreloadData(config);
 
     if (!Array.isArray(preloadData.maintenanceList)) {
       throw new ApiDataError('Maintenance list data must be an array');
@@ -63,7 +77,7 @@ export async function getMaintenanceData() {
     };
   } catch (error) {
     logApiError('get maintenance data', error, {
-      endpoint: `${apiConfig.apiEndpoint}/maintenance`,
+      endpoint: `${config.apiEndpoint}/maintenance`,
     });
 
     return {
@@ -74,9 +88,74 @@ export async function getMaintenanceData() {
   }
 }
 
-export const getGlobalConfig = cache(async (): Promise<GlobalConfig> => {
+export const getPageTabsMetadata = cache(async (): Promise<PageTabMeta[]> => {
+  const baseConfig = getConfig();
+
+  if (!baseConfig) {
+    return [];
+  }
+
+  const uniquePageIds = Array.from(new Set(baseConfig.pageIds));
+
+  const tabs = await Promise.all(
+    uniquePageIds.map(async (pageId) => {
+      const pageConfig = getConfig(pageId);
+
+      if (!pageConfig) {
+        return null;
+      }
+
+      try {
+        const preloadData = await getPreloadData(pageConfig);
+        const meta = preloadData.config ?? {};
+
+        const title = typeof meta.title === 'string' && meta.title.trim().length > 0
+          ? meta.title.trim()
+          : pageConfig.siteMeta.title?.trim() || pageId;
+
+        const description =
+          typeof meta.description === 'string' && meta.description.trim().length > 0
+            ? meta.description.trim()
+            : pageConfig.siteMeta.description?.trim();
+
+        const icon =
+          typeof meta.icon === 'string' && meta.icon.trim().length > 0
+            ? meta.icon.trim()
+            : pageConfig.siteMeta.icon;
+
+        return {
+          id: pageId,
+          title,
+          description,
+          icon,
+        } satisfies PageTabMeta;
+      } catch (error) {
+        console.error('Failed to resolve metadata for status page tab', {
+          pageId,
+          error,
+        });
+
+        const fallbackTitle = pageConfig.siteMeta.title?.trim();
+        const fallbackDescription = pageConfig.siteMeta.description?.trim();
+
+        return {
+          id: pageId,
+          title: fallbackTitle && fallbackTitle.length > 0 ? fallbackTitle : pageId,
+          description: fallbackDescription && fallbackDescription.length > 0 ? fallbackDescription : undefined,
+          icon: pageConfig.siteMeta.icon,
+        } satisfies PageTabMeta;
+      }
+    }),
+  );
+
+  return tabs.filter((tab) => tab !== null) as PageTabMeta[];
+});
+
+export const getGlobalConfig = cache(async (pageId?: string): Promise<GlobalConfig> => {
+  const config = resolvePageConfig(pageId);
+
   try {
-    const preloadData = await getPreloadData();
+    const preloadData = await getPreloadData(config);
 
     if (!preloadData.config) {
       throw new ConfigError('Configuration data is missing');
@@ -101,10 +180,10 @@ export const getGlobalConfig = cache(async (): Promise<GlobalConfig> => {
           ? 'light'
           : 'system';
 
-    const maintenanceData = await getMaintenanceData();
+    const maintenanceData = await getMaintenanceData(config.pageId);
     const maintenanceList = maintenanceData.maintenanceList || [];
 
-    const config: GlobalConfig = {
+    const result: GlobalConfig = {
       config: {
         ...preloadData.config,
         theme,
@@ -119,12 +198,15 @@ export const getGlobalConfig = cache(async (): Promise<GlobalConfig> => {
       maintenanceList: maintenanceList,
     };
 
-    return config;
+    return result;
   } catch (error) {
     console.error(
       'Failed to get configuration data:',
       error instanceof ConfigError ? error.message : 'Unknown error',
-      error,
+      {
+        error,
+        endpoint: config.htmlEndpoint,
+      },
     );
 
     return {
@@ -147,9 +229,9 @@ export const getGlobalConfig = cache(async (): Promise<GlobalConfig> => {
   }
 });
 
-export async function getPreloadData() {
+export async function getPreloadData(config: Config) {
   try {
-    const htmlResponse = await customFetch(apiConfig.htmlEndpoint, customFetchOptions);
+    const htmlResponse = await customFetch(config.htmlEndpoint, customFetchOptions);
 
     if (!htmlResponse.ok) {
       throw new ConfigError(
@@ -163,20 +245,42 @@ export async function getPreloadData() {
     // Uptime Kuma version > 1.18.4, use script#preload-data to get preload data
     // @see https://github.com/louislam/uptime-kuma/commit/6e07ed20816969bfd1c6c06eb518171938312782
     // & https://github.com/louislam/uptime-kuma/issues/2186#issuecomment-1270471470
-    let preloadScript = $('#preload-data').text();
+    const { payload: initialPayload, source } = getPreloadPayload($);
+    let preloadScript = initialPayload ?? '';
+
+    if (source === 'data-json') {
+      console.debug('Using preload data from data-json attribute');
+    }
 
     if (!preloadScript || preloadScript.trim() === '') {
       // Uptime Kuma version <= 1.18.4, use script:contains("window.preloadData") to get preload data
       const scriptWithPreloadData = $('script:contains("window.preloadData")').text();
-      
+
       if (scriptWithPreloadData) {
-        const match = scriptWithPreloadData.match(/window\.preloadData\s*=\s*({.*});/);
+        const match = scriptWithPreloadData.match(/window\.preloadData\s*=\s*({[\s\S]*?});/);
         if (match && match[1]) {
           preloadScript = match[1];
           console.log('Successfully extracted preload data from window.preloadData');
         } else {
           console.error('Failed to extract preload data with regex. Script content:', scriptWithPreloadData.slice(0, 200));
         }
+      }
+    }
+
+    if (!preloadScript || preloadScript.trim() === '') {
+      console.warn('Preload script missing, attempting status page API fallback');
+      try {
+        const apiFallback = await fetchPreloadDataFromApi({
+          baseUrl: config.baseUrl,
+          pageId: config.pageId,
+          fetchFn: (url, init) =>
+            customFetch(url, init as RequestInit & { maxRetries?: number; retryDelay?: number; timeout?: number }),
+          requestInit: customFetchOptions,
+        });
+        console.info('Using status page API fallback for preload data');
+        return apiFallback.data;
+      } catch (apiError) {
+        console.error('Status page API fallback failed:', apiError);
       }
     }
 
@@ -209,7 +313,7 @@ export async function getPreloadData() {
       throw error;
     }
     console.error('Failed to get preload data:', {
-      endpoint: apiConfig.htmlEndpoint,
+      endpoint: config.htmlEndpoint,
       error:
         error instanceof Error
           ? {
