@@ -21,4 +21,5 @@ export interface GeneratedConfig {
   isShowStarButton: boolean;
   isShowHomeButton: boolean;
   homeLink: string;
+  isShowRecentEvents: boolean;
 }

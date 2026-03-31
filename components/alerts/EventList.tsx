@@ -107,30 +107,33 @@ export function EventList() {
       className="mb-8"
       icon={<Activity className="h-4 w-4" />}
     >
-      <ul className="space-y-2">
+      <ul className="grid grid-cols-[7rem_5.5rem_1fr] items-center gap-y-2 gap-x-3 text-sm">
         {events.map((event, idx) => (
           <li
             // oxlint-disable-next-line react/no-array-index-key -- composite key for safety
             key={`${event.monitorId}-${event.time}-${idx}`}
-            className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm"
+            className="contents"
           >
-            <span className="w-28 shrink-0 text-xs text-gray-400 dark:text-gray-500">
+            <span className="text-xs text-gray-400 dark:text-gray-500">
               {format.relativeTime(new Date(event.time))}
             </span>
-            <Chip
-              size="sm"
-              color={getStatusChipColor(event.status)}
-              variant="flat"
-              className="shrink-0"
-            >
-              {getStatusLabel(event.status)}
-            </Chip>
-            <span className="font-medium text-gray-800 dark:text-gray-200">
-              {event.monitorName}
+            <span>
+              <Chip
+                size="sm"
+                color={getStatusChipColor(event.status)}
+                variant="flat"
+              >
+                {getStatusLabel(event.status)}
+              </Chip>
             </span>
-            {event.msg && event.msg.toLowerCase() !== OK_MESSAGE ? (
-              <span className="truncate text-gray-400 dark:text-gray-500">{event.msg}</span>
-            ) : null}
+            <span className="flex min-w-0 items-baseline gap-2">
+              <span className="font-medium text-gray-800 dark:text-gray-200">
+                {event.monitorName}
+              </span>
+              {event.msg && event.msg.toLowerCase() !== OK_MESSAGE ? (
+                <span className="truncate text-gray-400 dark:text-gray-500">{event.msg}</span>
+              ) : null}
+            </span>
           </li>
         ))}
       </ul>

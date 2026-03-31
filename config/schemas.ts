@@ -24,6 +24,7 @@ export const generatedConfigSchema = z.object({
   isShowStarButton: z.boolean(),
   isShowHomeButton: z.boolean(),
   homeLink: z.string(),
+  isShowRecentEvents: z.boolean(),
 });
 
 export type SiteMeta = z.infer<typeof siteMetaSchema>;

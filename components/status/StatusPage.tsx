@@ -183,7 +183,7 @@ export function StatusPage() {
 
         {globalConfig?.incident && <IncidentMarkdownAlert incident={globalConfig.incident} />}
 
-        <EventList />
+        {currentPageConfig.isShowRecentEvents && <EventList />}
 
         <FilterResults matchedMonitorsCount={matchedMonitorsCount} />
 

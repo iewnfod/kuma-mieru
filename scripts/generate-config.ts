@@ -214,6 +214,7 @@ async function generateConfig() {
     const isShowStarButton = getBooleanWithSource('KUMA_MIERU_SHOW_STAR_BUTTON', true);
     const isShowHomeButton = getBooleanEnvVar('FEATURE_SHOW_HOME_BUTTON', true);
     const homeLink = getOptionalEnvVar('FEATURE_HOME_LINK', '/');
+    const isShowRecentEvents = getBooleanWithSource('KUMA_MIERU_SHOW_RECENT_EVENTS', true);
 
     console.log(
       `[env] - isEditThisPage: ${isEditThisPage.value}` +
@@ -222,6 +223,10 @@ async function generateConfig() {
     console.log(
       `[env] - isShowStarButton: ${isShowStarButton.value}` +
         (isShowStarButton.source ? ` [${isShowStarButton.source}]` : '')
+    );
+    console.log(
+      `[env] - isShowRecentEvents: ${isShowRecentEvents.value}` +
+        (isShowRecentEvents.source ? ` [${isShowRecentEvents.source}]` : '')
     );
 
     const pageConfigEntries = [] as Array<{
@@ -265,6 +270,7 @@ async function generateConfig() {
       isShowStarButton: isShowStarButton.value,
       isShowHomeButton,
       homeLink,
+      isShowRecentEvents: isShowRecentEvents.value,
     });
 
     const configPath = path.join(process.cwd(), 'config', 'generated-config.json');
