@@ -14,13 +14,12 @@ import {
 } from '@heroui/react';
 import { link as linkStyles } from '@heroui/theme';
 import clsx from 'clsx';
-import Image from 'next/image';
 import NextLink from 'next/link';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { GithubIcon, SearchIcon } from '@/components/basic/icons';
 import { ThemeSwitch } from '@/components/basic/theme-switch';
-import { buildIconProxyUrl } from '@/utils/icon-proxy';
+import { buildIconProxyUrl, getIconUrl } from '@/utils/icon-proxy';
 import { motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -120,14 +119,10 @@ export const Navbar = () => {
     </Button>
   );
 
-  const iconUrl = useRef<string>('/icon.svg');
-  const getIconUrl = async () => {
-    const icon = await fetch(buildIconProxyUrl(pageConfig.pageId)).then(res => res.text());
-    return icon ?? '/icon.svg';
-  };
+  const [iconUrl, setIconUrl] = useState<string>('/icon.svg');
   useEffect(() => {
-    getIconUrl().then(icon => {
-      iconUrl.current = icon;
+    getIconUrl(pageConfig.pageId).then(icon => {
+      setIconUrl(icon);
     });
   }, []);
   const navItems = [
@@ -153,12 +148,11 @@ export const Navbar = () => {
         <NavbarBrand className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href={homeHref}>
             <img
-              src={iconUrl.current ?? '/icon.svg'}
+              src={iconUrl ?? '/icon.svg'}
               alt=""
               width={34}
               height={34}
               className="translate-y-1"
-              loading="eager"
             />
             <p className="font-bold text-inherit whitespace-pre">{resolvedTitle}</p>
           </NextLink>

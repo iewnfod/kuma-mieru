@@ -20,7 +20,7 @@ import { Button, Tooltip } from '@heroui/react';
 import { LayoutGrid, LayoutList } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import {buildIconProxyUrl} from "@/utils/icon-proxy";
+import { getIconUrl } from '@/utils/icon-proxy';
 
 const GLOBAL_VIEW_PREFERENCE_KEY = 'view-preference';
 
@@ -42,14 +42,13 @@ export function StatusPage() {
 
   useEffect(() => {
     // custom icon
-    fetch(buildIconProxyUrl()).then(res => res.text())
-      .then((iconUrl) => {
-        let link = document.querySelector("link[rel*='icon']") || document.createElement('link');
-        link.setAttribute('type', 'image/x-icon');
-        link.setAttribute('href', iconUrl || '/icon.svg');
-        link.setAttribute('rel', 'shortcut icon');
-        document.getElementsByTagName('head')[0].appendChild(link);
-      });
+    getIconUrl().then(iconUrl => {
+      let link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+      link.setAttribute('type', 'image/x-icon');
+      link.setAttribute('href', iconUrl || '/icon.svg');
+      link.setAttribute('rel', 'shortcut icon');
+      document.getElementsByTagName('head')[0].appendChild(link);
+    });
   }, []);
 
   useEffect(() => {

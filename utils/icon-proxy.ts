@@ -5,3 +5,8 @@ export const buildIconProxyUrl = (pageId?: string): string => {
 
   return `/api/icon?pageId=${encodeURIComponent(pageId)}`;
 };
+
+export const getIconUrl = async (pageId?: string) => {
+  const icon = await fetch(buildIconProxyUrl(pageId)).then(res => res.text());
+  return icon ?? '/icon.svg';
+};
