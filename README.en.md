@@ -1,7 +1,7 @@
 # Kuma Mieru :traffic_light:
 
-**Kuma Mieru - A Modern Third-Party Monitoring Dashboard for Uptime Kuma**  
-Built with Next.js 15, TypeScript, and Recharts, this project enhances Uptime Kuma's public status pages with intuitive visualizations and latency charts.
+**Kuma Mieru - A Modern Third-Party Monitoring Dashboard for Uptime Kuma**
+Built with Next.js 16, TypeScript, and Recharts, this project enhances Uptime Kuma's public status pages with intuitive visualizations and latency charts.
 
 [中文版](README.md) | English Version
 
@@ -11,48 +11,55 @@ Built with Next.js 15, TypeScript, and Recharts, this project enhances Uptime Ku
 > please note to modify the `Display Timezone` (Display Timezone) to `UTC+0` time zone in the _Uptime Kuma_ settings.
 
 <div align="center">
-
 <!-- Release -->
 
-[![Release](https://img.shields.io/github/v/release/Alice39s/kuma-mieru?style=flat-square&color=blue&label=Release)](https://github.com/Alice39s/kuma-mieru/releases/latest) [![License](https://img.shields.io/github/license/Alice39s/kuma-mieru?style=flat-square&color=blue)](https://github.com/Alice39s/kuma-mieru/blob/main/LICENSE) [![Release](https://img.shields.io/github/actions/workflow/status/Alice39s/kuma-mieru/release.yml?branch=main&style=flat-square&logo=github&label=Release)](https://github.com/Alice39s/kuma-mieru/actions/workflows/release.yml) [![Docker](https://img.shields.io/github/actions/workflow/status/Alice39s/kuma-mieru/docker-build.yml?branch=main&style=flat-square&logo=docker&label=Docker)](https://github.com/Alice39s/kuma-mieru/actions/workflows/docker-build.yml)
-
-<!-- Tech Stack -->
-
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![React](https://img.shields.io/badge/React-v19-387CA0?style=flat-square&logo=react&logoColor=white)](https://reactjs.org/) [![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js&logoColor=white)](https://nextjs.org/)
-
-[![Bun](https://img.shields.io/badge/Bun-Package%20Manager-14151A?style=flat-square&logo=bun&logoColor=white)](https://bun.sh/) [![Recharts](https://img.shields.io/badge/Recharts-Charting%20Library-8884d8?style=flat-square&logo=recharts&logoColor=white)](https://recharts.org/en-US/) [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-v4-4EB9FA?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Release](https://img.shields.io/github/v/release/Alice39s/kuma-mieru?style=flat-square&color=blue&label=Release)](https://github.com/Alice39s/kuma-mieru/releases/latest) [![License](https://img.shields.io/github/license/Alice39s/kuma-mieru?style=flat-square&color=blue)](https://github.com/Alice39s/kuma-mieru/blob/main/LICENSE)
+[![Workflow](https://img.shields.io/github/actions/workflow/status/Alice39s/kuma-mieru/release.yml?branch=main&style=flat-square&logo=github&label=Workflow)](https://github.com/Alice39s/kuma-mieru/actions/workflows/release.yml) [![Docker](https://img.shields.io/github/actions/workflow/status/Alice39s/kuma-mieru/docker-build.yml?branch=main&style=flat-square&logo=docker&label=Docker)](https://github.com/Alice39s/kuma-mieru/actions/workflows/docker-build.yml)
 
 <!-- Project Data -->
 
 [![Stars](https://img.shields.io/github/stars/Alice39s/kuma-mieru?style=flat-square&logo=github&color=yellow&label=Stars)](https://github.com/Alice39s/kuma-mieru/stargazers) [![Forks](https://img.shields.io/github/forks/Alice39s/kuma-mieru?style=flat-square&logo=github&color=yellow&label=Forks)](https://github.com/Alice39s/kuma-mieru/network/members)
 
+<!-- Tech Stack -->
+
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![React](https://img.shields.io/badge/React-v19-387CA0?style=flat-square&logo=react&logoColor=white)](https://reactjs.org/) [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![Bun](https://img.shields.io/badge/Bun-Package%20Manager-14151A?style=flat-square&logo=bun&logoColor=white)](https://bun.sh/) [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-v4-4EB9FA?style=flat-square&logo=tailwind-css&logoColor=white)](https://v4.tailwindcss.com/)
+
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Alice39s/kuma-mieru)
+
 </div>
 
 ## Table of Contents
 
-- [Table of Contents](#table-of-contents)
-- [Key Features :sparkles:](#key-features-sparkles)
-- [Preview :camera:](#preview-camera)
-- [Deployment :star:](#deployment-star)
-  - [Vercel Deployment (Recommended)](#vercel-deployment-recommended)
-    - [1. Fork Repository](#1-fork-repository)
-    - [2. Import to Vercel](#2-import-to-vercel)
-    - [3. Configure Environment Variables](#3-configure-environment-variables)
-    - [4. Update Repository](#4-update-repository)
-  - [Cloudflare Workers Deployment](#cloudflare-workers-deployment)
-  - [Local Installation](#local-installation)
-- [Docker Deployment :whale: (Beta)](#docker-deployment-whale-beta)
-  - [Using Docker Compose (Recommended)](#using-docker-compose-recommended)
-  - [Manual Docker Deployment](#manual-docker-deployment)
+- [Kuma Mieru :traffic_light:](#kuma-mieru-traffic_light)
+  - [Table of Contents](#table-of-contents)
+  - [Key Features :sparkles:](#key-features-sparkles)
+  - [Preview :camera:](#preview-camera)
+  - [Deployment :star:](#deployment-star)
+    - [Vercel Deployment (Recommended)](#vercel-deployment-recommended)
+      - [1. Fork Repository](#1-fork-repository)
+      - [2. Import to Vercel](#2-import-to-vercel)
+      - [3. Configure Environment Variables](#3-configure-environment-variables)
+      - [4. Update Repository](#4-update-repository)
+    - [Cloudflare Workers Deployment](#cloudflare-workers-deployment)
+    - [Local Installation](#local-installation)
+  - [Docker Deployment :whale: (Beta)](#docker-deployment-whale-beta)
+    - [Using Docker Compose (Recommended)](#using-docker-compose-recommended)
+    - [Manual Docker Deployment](#manual-docker-deployment)
+      - [1. Pull Container Image](#1-pull-container-image)
+        - [Pull from GHCR (Recommended)](#pull-from-ghcr-recommended)
+      - [2. Modify Environment Variables](#2-modify-environment-variables)
+      - [3. Start Container Service](#3-start-container-service)
+        - [Using GHCR Image](#using-ghcr-image)
+  - [Version Strategy](#version-strategy)
   - [Environment Variables](#environment-variables)
-  - [Health Check](#health-check)
-- [Integration with Uptime Kuma :link:](#integration-with-uptime-kuma-link)
-- [FAQ :question:](#faq-question)
-  - [Why is the time I see in Kuma Mieru offset from the time I see in Uptime Kuma?](#why-is-the-time-i-see-in-kuma-mieru-offset-from-the-time-i-see-in-uptime-kuma)
-  - [Is Uptime Robot / Better Stack / other monitoring data sources compatible?](#is-uptime-robot-better-stack-other-monitoring-data-sources-compatible)
-- [Contribution Guide :handshake:](#contribution-guide-handshake)
-- [Star History :star2:](#star-history-star2)
-- [License :lock:](#license-lock)
+  - [Integration with Uptime Kuma :link:](#integration-with-uptime-kuma-link)
+  - [FAQ :question:](#faq-question)
+    - [Why is the time I see in Kuma Mieru offset from the time I see in Uptime Kuma?](#why-is-the-time-i-see-in-kuma-mieru-offset-from-the-time-i-see-in-uptime-kuma)
+    - [Is Uptime Robot / Better Stack / other monitoring data sources compatible?](#is-uptime-robot--better-stack--other-monitoring-data-sources-compatible)
+  - [Contribution Guide :handshake:](#contribution-guide-handshake)
+  - [Star History :star2:](#star-history-star2)
+  - [License :lock:](#license-lock)
 
 ## Key Features :sparkles:
 
@@ -84,17 +91,16 @@ Built with Next.js 15, TypeScript, and Recharts, this project enhances Uptime Ku
 
 #### 2. Import to Vercel
 
-Go to https://vercel.com/new, select **Import** to import the repository you just forked.
+Go to <https://vercel.com/new>, select **Import** to import the repository you just forked.
 
 #### 3. Configure Environment Variables
 
 > [!NOTE]
-> Please ensure you have configured the `UPTIME_KUMA_BASE_URL` and `PAGE_ID` environment variables, otherwise the monitoring data will not be displayed correctly.
+> Please configure `UPTIME_KUMA_URLS` (recommended), otherwise monitoring data will not be displayed correctly.
 >
-> For more information about the `UPTIME_KUMA_BASE_URL` and `PAGE_ID` configuration, please refer to the [Environment Variables](#environment-variables) section.
+> Legacy `UPTIME_KUMA_BASE_URL` + `PAGE_ID` is still supported. See [Environment Variables](#environment-variables) for details.
 
-1. Click `Environment Variables` to add the following two environment variables:  
-   `UPTIME_KUMA_BASE_URL` and `PAGE_ID`.
+1. Click `Environment Variables` and add `UPTIME_KUMA_URLS` (recommended).
 
 2. Click the `Deploy` button to deploy instantly on Vercel.
 
@@ -143,17 +149,18 @@ Go to https://vercel.com/new, select **Import** to import the repository you jus
    bun install
    ```
 
-3. **Configure Environment**  
+3. **Configure Environment**
    Copy `.env.example` to `.env` and modify:
 
    ```bash
-   UPTIME_KUMA_BASE_URL=https://your-kuma-instance.com
-   PAGE_ID=your_status_page_id
+   UPTIME_KUMA_URLS=https://your-kuma-instance.com/status/your_status_page_id
    ```
 
-   _Example: For URL `https://status.kuma-mieru.invalid/status/prod`, set:  
-   `UPTIME_KUMA_BASE_URL=https://status.kuma-mieru.invalid`  
-   `PAGE_ID=prod`_
+   _Multiple pages example:_
+
+   ```bash
+   UPTIME_KUMA_URLS=https://status.kuma-mieru.invalid/status/prod|https://status.kuma-mieru.invalid/status/staging
+   ```
 
 4. **Start Development Server**
 
@@ -164,6 +171,7 @@ Go to https://vercel.com/new, select **Import** to import the repository you jus
    Access at: [http://localhost:3883](http://localhost:3883)
 
 5. **Production Build**
+
    ```bash
    bun run build
    bun run start
@@ -180,7 +188,7 @@ Go to https://vercel.com/new, select **Import** to import the repository you jus
    cd kuma-mieru
    ```
 
-2. **Configure Environment Variables**  
+2. **Configure Environment Variables**
    Duplicate the `.env.example` file to create your `.env` file:
 
    ```bash
@@ -190,8 +198,7 @@ Go to https://vercel.com/new, select **Import** to import the repository you jus
    Edit the `.env` file with required configurations:
 
    ```
-   UPTIME_KUMA_BASE_URL=https://example.kuma-mieru.invalid
-   PAGE_ID=your-status-page-id
+   UPTIME_KUMA_URLS=https://example.kuma-mieru.invalid/status/your-status-page-id
    ```
 
 3. **Start Services**
@@ -217,37 +224,93 @@ Go to https://vercel.com/new, select **Import** to import the repository you jus
 
 ### Manual Docker Deployment
 
-1. **Build Image**
+#### 1. Pull Container Image
 
-   ```bash
-   docker build -t kuma-mieru .
-   ```
+##### Pull from GHCR (Recommended)
 
-2. **Modify Environment Variables**
+```bash
+docker pull ghcr.io/alice39s/kuma-mieru:1
+```
 
-   ```bash
-   cp .env.example .env
-   ```
+#### 2. Modify Environment Variables
 
-   Please refer to the [Environment Variables](#environment-variables) section for more details.
+Copy `.env.example` file to create your `.env` file:
 
-3. **Run Container**
+```bash
+cp .env.example .env
+```
 
-   ```bash
-   docker run -d \
-     --name kuma-mieru \
-     -p 3883:3000 \
-     -e UPTIME_KUMA_BASE_URL=https://example.kuma-mieru.invalid \
-     -e PAGE_ID=your-status-page-id \
-     kuma-mieru
-   ```
+Please refer to the [Environment Variables](#environment-variables) section for more details, and prioritize configuring the `UPTIME_KUMA_URLS` variable in `.env`.
 
-### Environment Variables
+#### 3. Start Container Service
 
-First, assume your Uptime Kuma status page URL is `https://example.kuma-mieru.invalid/status/test1`
+##### Using GHCR Image
 
-Then, the environment variables you need to configure are as follows:
+```bash
+docker run -d \
+  --name kuma-mieru \
+  -p 3883:3000 \
+  -e UPTIME_KUMA_URLS="https://example.kuma-mieru.invalid/status/default|https://example.kuma-mieru.invalid/status/secondary" \
+  -e KUMA_MIERU_TITLE="Kuma Mieru" \
+  ghcr.io/alice39s/kuma-mieru:1
+```
 
+## Version Strategy
+
+> [!WARNING]
+> Docker image recommends using `ghcr.io/alice39s/kuma-mieru:1` (major version channel).
+>
+> Forward compatibility will be maintained as much as possible within `v1` major version; `v2` will be a version containing major Breaking Changes.
+>
+> Pinning to minor/patch versions (e.g., `:1.6` or `:1.6.2`) is not recommended unless you have a clear canary and rollback strategy.
+
+## Environment Variables
+
+First, assume your Uptime Kuma status page URL is:
+
+`https://example.kuma-mieru.invalid/status/test1`
+
+Recommended:
+
+`UPTIME_KUMA_URLS=https://example.kuma-mieru.invalid/status/test1`
+
+For multiple status pages, separate full URLs with `|`:
+
+`UPTIME_KUMA_URLS=https://example.kuma-mieru.invalid/status/test1|https://example.kuma-mieru.invalid/status/test2`
+
+Environment variables (including backward compatibility):
+
+| Variable Name                   | Required | Description                                                                                                          | Example                                                                                                    |
+| ------------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| UPTIME_KUMA_URLS                | Yes\*    | Recommended. Full status page URL(s), supports `\|` separated multiple URLs (can come from different Kuma instances) | <https://example.kuma-mieru.invalid/status/default\|https://example.kuma-mieru.invalid/status/secondary>   |
+| UPTIME_KUMA_BASE_URL            | Yes\*    | Legacy. Base URL of Uptime Kuma instance (used only when `UPTIME_KUMA_URLS` is not set)                              | <https://example.kuma-mieru.invalid>                                                                       |
+| PAGE_ID                         | Yes\*    | Legacy. Status page IDs, comma-separated and first value is default (used only when `UPTIME_KUMA_URLS` not set)      | default,status-asia                                                                                        |
+| KUMA_MIERU_EDIT_THIS_PAGE       | No       | Show "Edit This Page" button (new variable name)                                                                     | false                                                                                                      |
+| KUMA_MIERU_SHOW_STAR_BUTTON     | No       | Show "Star on GitHub" button (new variable name)                                                                     | true                                                                                                       |
+| KUMA_MIERU_TITLE                | No       | Custom page title (new variable name)                                                                                | My Monitoring Dashboard                                                                                    |
+| KUMA_MIERU_DESCRIPTION          | No       | Custom page description (new variable name)                                                                          | A beautiful monitoring dashboard                                                                           |
+| KUMA_MIERU_ICON                 | No       | Custom page icon URL (new variable name)                                                                             | /icon.svg                                                                                                  |
+| FEATURE_EDIT_THIS_PAGE          | No       | Legacy alias of `KUMA_MIERU_EDIT_THIS_PAGE`                                                                          | false                                                                                                      |
+| FEATURE_SHOW_STAR_BUTTON        | No       | Legacy alias of `KUMA_MIERU_SHOW_STAR_BUTTON`                                                                        | true                                                                                                       |
+| FEATURE_TITLE                   | No       | Legacy alias of `KUMA_MIERU_TITLE`                                                                                   | My Monitoring Dashboard                                                                                    |
+| FEATURE_DESCRIPTION             | No       | Legacy alias of `KUMA_MIERU_DESCRIPTION`                                                                             | A beautiful monitoring dashboard                                                                           |
+| FEATURE_ICON                    | No       | Legacy alias of `KUMA_MIERU_ICON`                                                                                    | /icon.svg                                                                                                  |
+| ALLOW_INSECURE_TLS              | No       | Whether to skip HTTPS certificate validation when requesting upstream Uptime Kuma (trusted self-signed only)         | `false` (default, strict validation) / `true` (skip validation, security risk)                             |
+| REQUEST_TIMEOUT_MS              | No       | Global upstream request timeout (milliseconds, default 8000)                                                         | `8000`                                                                                                     |
+| REQUEST_RETRY_MAX               | No       | Global upstream request max retry count (default 3)                                                                  | `3`                                                                                                        |
+| REQUEST_RETRY_DELAY_MS          | No       | Global upstream request retry base interval (milliseconds, default 500)                                              | `500`                                                                                                      |
+| SSR_STRICT_MODE                 | No       | Enable strict SSR failure mode (trigger global error page when all pages fail)                                       | `true` / `false` (default)                                                                                 |
+| NEXT_PUBLIC_ERROR_PAGE_DEV_MODE | No       | Whether to show full stack trace in error page                                                                       | `false` (default) / `true`                                                                                 |
+| ALLOW_EMBEDDING                 | No       | Whether to allow embedding in iframe (applies at runtime; no image rebuild needed)                                   | `false` (block) / `true` (allow all, not recommended) / `example.com,app.com` (whitelist)                  |
+| STRICT_IMAGE_REMOTE_PATTERNS    | No       | Enable strict remote image domain allowlist (build-time)                                                             | `false` (default, allow all remote image domains) / `true` (allow only domains generated by image-domains) |
+
+\* Use either `UPTIME_KUMA_URLS` or `UPTIME_KUMA_BASE_URL + PAGE_ID`. If both are set, `UPTIME_KUMA_URLS` takes precedence.
+
+After editing `.env`, run `docker compose up -d --force-recreate` so the container picks up updated environment variables.
+
+> [!WARNING]
+> By default (`STRICT_IMAGE_REMOTE_PATTERNS=false`), `next/image` remote domain restrictions are relaxed to avoid image failures when Docker runtime endpoints change.
+> In high-security environments, set `STRICT_IMAGE_REMOTE_PATTERNS=true` for self-built images and ensure your build step generates a complete domain allowlist.
 | Variable Name            | Required | Description                             | Example                            |
 | ------------------------ |----------|-----------------------------------------| ---------------------------------- |
 | UPTIME_KUMA_BASE_URL     | Yes      | Base URL of Uptime Kuma instance        | https://example.kuma-mieru.invalid |
@@ -297,7 +360,7 @@ curl http://localhost:3883/api/health
 >
 > If you are using an older version, please refer to the [Uptime Kuma official documentation](https://github.com/louislam/uptime-kuma/wiki/%F0%9F%86%99-How-to-Update) to try to upgrade to the latest stable version (v1.23.0+), and remember to back up your data.
 
-Seamlessly works with the popular self-hosted monitoring tool:  
+Seamlessly works with the popular self-hosted monitoring tool:
 [Uptime Kuma](https://github.com/louislam/uptime-kuma)
 
 **Prerequisites**:
@@ -323,7 +386,7 @@ However, v2 may consider to support API interface of other monitoring tools such
 
 ## Contribution Guide :handshake:
 
-We welcome contributions! Please review:  
+We welcome contributions! Please review:
 [CONTRIBUTING.md](CONTRIBUTING.md) for development guidelines.
 
 ## Star History :star2:

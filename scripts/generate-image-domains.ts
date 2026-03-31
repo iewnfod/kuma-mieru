@@ -1,47 +1,105 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
+import { getString } from './lib/env';
+import { resolveEndpointConfig } from './lib/uptime-kuma';
+
+type ImageProtocol = 'http' | 'https';
+
+interface ImageDomainPattern {
+  hostname: string;
+  protocols: ImageProtocol[];
+}
 
 interface ImageDomainsConfig {
   timestamp: string;
+  patterns: ImageDomainPattern[];
+  /**
+   * @deprecated Retained for backward compatibility. Use `patterns` instead.
+   */
   domains: string[];
 }
 
-const getHostnameFromUrl = (url: string | null): string | null => {
+const supportedProtocols: ImageProtocol[] = ['http', 'https'];
+
+const parseUrl = (url: string | null): { hostname: string; protocol: ImageProtocol } | null => {
   if (!url) return null;
+
   try {
-    return new URL(url).hostname;
+    const parsed = new URL(url);
+    const protocol = parsed.protocol.replace(':', '');
+
+    if (supportedProtocols.includes(protocol as ImageProtocol)) {
+      return {
+        hostname: parsed.hostname,
+        protocol: protocol as ImageProtocol,
+      };
+    }
+
+    return null;
   } catch (e) {
     return null;
   }
 };
 
-const isAbsoluteUrl = (url: string | null): boolean => {
-  if (!url) return false;
+const addDomainToMap = (
+  map: Map<string, Set<ImageProtocol>>,
+  value: { hostname: string; protocol: ImageProtocol } | null
+) => {
+  if (!value) return;
+
+  const protocols = map.get(value.hostname) ?? new Set<ImageProtocol>();
+  protocols.add(value.protocol);
+  map.set(value.hostname, protocols);
+};
+
+const resolveBaseUrlsFromEndpointConfig = (): string[] => {
   try {
-    return new URL(url).protocol.startsWith('http');
-  } catch (e) {
-    return false;
+    const { pageEndpoints } = resolveEndpointConfig();
+    return Array.from(new Set(pageEndpoints.map(endpoint => endpoint.baseUrl)));
+  } catch (error) {
+    const hasEndpointEnv =
+      Boolean(process.env.UPTIME_KUMA_URLS?.trim()) ||
+      Boolean(process.env.UPTIME_KUMA_BASE_URL?.trim()) ||
+      Boolean(process.env.PAGE_ID?.trim());
+
+    if (hasEndpointEnv) {
+      console.warn('[env] Failed to resolve endpoint config for image domains:', error);
+    }
+
+    return [];
   }
 };
 
 const generateImageDomains = (): void => {
-  const baseUrl = process.env.UPTIME_KUMA_BASE_URL || '';
-  const baseUrlHostname = getHostnameFromUrl(baseUrl);
+  const domainsMap = new Map<string, Set<ImageProtocol>>();
 
-  const customIconUrl = process.env.FEATURE_ICON || '';
-  const isCustomIconExternal = isAbsoluteUrl(customIconUrl);
-  const customIconHostname = isCustomIconExternal ? getHostnameFromUrl(customIconUrl) : null;
+  for (const baseUrl of resolveBaseUrlsFromEndpointConfig()) {
+    addDomainToMap(domainsMap, parseUrl(baseUrl));
+  }
 
-  const allDomains = [baseUrlHostname, customIconHostname].filter(Boolean) as string[];
+  const iconEnv = getString('KUMA_MIERU_ICON');
+  addDomainToMap(domainsMap, parseUrl(iconEnv.value ?? ''));
 
-  const uniqueDomains = [...new Set(allDomains)].length > 0 ? [...new Set(allDomains)] : ['*'];
+  const patterns: ImageDomainPattern[] = Array.from(domainsMap.entries()).map(
+    ([hostname, protocols]) => ({
+      hostname,
+      protocols: Array.from(protocols).sort(),
+    })
+  );
+
+  if (patterns.length === 0) {
+    patterns.push({ hostname: '*', protocols: [...supportedProtocols] });
+  }
+
+  const legacyDomains = patterns.map(pattern => pattern.hostname);
 
   const domainsConfig: ImageDomainsConfig = {
     timestamp: new Date().toISOString(),
-    domains: uniqueDomains,
+    patterns,
+    domains: legacyDomains,
   };
 
-  const outputPath = join(process.cwd(), 'config', 'generated-image-domains.json');
+  const outputPath = join(process.cwd(), 'config', 'generated', 'image-domains.json');
 
   mkdirSync(dirname(outputPath), { recursive: true });
 

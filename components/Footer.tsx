@@ -6,11 +6,14 @@ import { Link } from '@heroui/react';
 import packageJson from '@/package.json';
 
 interface FooterProps {
-  config: SiteConfig;
+  config?: SiteConfig;
 }
 
 export function Footer({ config }: FooterProps) {
-  const { footerText, showPoweredBy } = config;
+  const footerConfig = config;
+
+  const footerText = footerConfig?.footerText ?? '';
+  const showPoweredBy = footerConfig?.showPoweredBy ?? false;
 
   return (
     <footer className="w-full flex flex-col items-center justify-center py-4 px-4 mt-4 text-sm text-foreground-500 relative z-50">

@@ -8,14 +8,61 @@ import bundleAnalyzer from '@next/bundle-analyzer';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const getImageDomains = () => {
+const defaultProtocols = ['https', 'http'];
+
+const normalizePatterns = patterns => {
+  const seen = new Set();
+
+  return patterns.filter(pattern => {
+    if (!pattern?.hostname || !pattern?.protocol) return false;
+
+    const key = `${pattern.protocol}://${pattern.hostname}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+};
+
+const getImageRemotePatterns = () => {
+  if (process.env.STRICT_IMAGE_REMOTE_PATTERNS !== 'true') {
+    return normalizePatterns(defaultProtocols.map(protocol => ({ hostname: '*', protocol })));
+  }
+
   try {
     const configPath = join(process.cwd(), 'config', 'generated', 'image-domains.json');
     const config = JSON.parse(readFileSync(configPath, 'utf8'));
-    return config.domains;
+
+    if (Array.isArray(config?.patterns) && config.patterns.length > 0) {
+      const patterns = config.patterns.flatMap(({ hostname, protocols }) => {
+        if (!hostname) return [];
+
+        const resolvedProtocols =
+          Array.isArray(protocols) && protocols.length > 0 ? protocols : defaultProtocols;
+
+        return resolvedProtocols.map(protocol => ({ hostname, protocol }));
+      });
+
+      const normalized = normalizePatterns(patterns);
+      if (normalized.length > 0) {
+        return normalized;
+      }
+    }
+
+    if (Array.isArray(config?.domains) && config.domains.length > 0) {
+      const patterns = config.domains.flatMap(hostname =>
+        defaultProtocols.map(protocol => ({ hostname, protocol }))
+      );
+
+      const normalized = normalizePatterns(patterns);
+      if (normalized.length > 0) {
+        return normalized;
+      }
+    }
   } catch (e) {
-    return ['*'];
+    // Fallback to defaults below
   }
+
+  return normalizePatterns(defaultProtocols.map(protocol => ({ hostname: '*', protocol })));
 };
 
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -27,10 +74,12 @@ const baseConfig = {
   reactStrictMode: true,
 
   images: {
-    remotePatterns: getImageDomains().map((hostname) => ({
-      protocol: 'https',
-      hostname,
-    })),
+    remotePatterns: getImageRemotePatterns(),
+    localPatterns: [
+      {
+        pathname: '/api/icon',
+      },
+    ],
     formats: ['image/avif', 'image/webp'],
     dangerouslyAllowSVG: true,
   },
@@ -82,30 +131,28 @@ const productionConfig = {
     reactRemoveProperties: true,
   },
 
-  serverExternalPackages: ['sharp', 'cheerio', 'markdown-it', 'sanitize-html'],
+  serverExternalPackages: ['sharp', 'cheerio'],
 
   async headers() {
+    const baseHeaders = [
+      {
+        key: 'X-Content-Type-Options',
+        value: 'nosniff',
+      },
+      {
+        key: 'X-XSS-Protection',
+        value: '1; mode=block',
+      },
+      {
+        key: 'Cache-Control',
+        value: 'public, max-age=300, stale-while-revalidate=60',
+      },
+    ];
+
     return [
       {
         source: '/(.*)',
-        headers: [
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN',
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
-          },
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=300, stale-while-revalidate=60',
-          },
-        ],
+        headers: baseHeaders,
       },
       {
         source: '/api/(.*)',

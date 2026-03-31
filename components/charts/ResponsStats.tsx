@@ -1,6 +1,7 @@
 import { Tooltip as HeroUITooltip } from '@heroui/react';
 import { clsx } from 'clsx';
 import { useTranslations } from 'next-intl';
+import { useMemo } from 'react';
 import { PolarAngleAxis, RadialBar, RadialBarChart, ResponsiveContainer } from 'recharts';
 
 interface ResponsStatsProps {
@@ -8,24 +9,57 @@ interface ResponsStatsProps {
   fill: string;
   isHome?: boolean;
   size?: 'sm' | 'md' | 'lg';
+  valueClassName?: string;
 }
 
-export function ResponsStats({ value, fill, isHome, size = 'md' }: ResponsStatsProps) {
-  const data = [{ value, fill }];
-  const t = useTranslations('node');
+const TOOLTIP_MOTION_PROPS = {
+  variants: {
+    exit: {
+      opacity: 0,
+      transition: {
+        duration: 0.1,
+        ease: 'easeOut',
+      },
+    },
+    enter: {
+      opacity: 1,
+      transition: {
+        duration: 0.15,
+        ease: 'easeOut',
+      },
+    },
+  },
+} as const;
 
-  const tooltipContent = !isHome ? (
-    <div className="flex flex-col gap-2">
-      <span className="text-md text-gray-500">
-        {t('uptimeStatus')}: {value.toFixed(2)}%
-      </span>
-    </div>
-  ) : (
-    `${t('uptimeStatus')}: ${value.toFixed(2)}%`
-  );
+export function ResponsStats({
+  value,
+  fill,
+  isHome,
+  size = 'md',
+  valueClassName,
+}: ResponsStatsProps) {
+  const t = useTranslations('node');
+  const formattedValue = useMemo(() => value.toFixed(2), [value]);
+  const data = useMemo(() => [{ value, fill }], [value, fill]);
+
+  const tooltipContent = useMemo(() => {
+    if (isHome) {
+      return `${t('uptimeStatus')}: ${formattedValue}%`;
+    }
+
+    return (
+      <div className="flex flex-col gap-2">
+        <span className="text-md text-gray-500">
+          {t('uptimeStatus')}: {formattedValue}%
+        </span>
+      </div>
+    );
+  }, [formattedValue, isHome, t]);
 
   const chartSize = size === 'sm' ? 'w-6 h-6' : size === 'lg' ? 'w-12 h-12' : 'w-10 h-10';
   const textSize = size === 'sm' ? 'text-xs' : size === 'lg' ? 'text-base' : 'text-sm';
+  const barSize = size === 'sm' ? 6 : size === 'lg' ? 14 : 12;
+  const gapClass = size === 'lg' ? 'gap-0.2' : 'gap-0.1';
 
   return (
     <HeroUITooltip
@@ -33,26 +67,9 @@ export function ResponsStats({ value, fill, isHome, size = 'md' }: ResponsStatsP
       placement="left"
       delay={0}
       closeDelay={0}
-      motionProps={{
-        variants: {
-          exit: {
-            opacity: 0,
-            transition: {
-              duration: 0.1,
-              ease: 'easeOut',
-            },
-          },
-          enter: {
-            opacity: 1,
-            transition: {
-              duration: 0.15,
-              ease: 'easeOut',
-            },
-          },
-        },
-      }}
+      motionProps={TOOLTIP_MOTION_PROPS}
     >
-      <div className={clsx('inline-flex items-center', !isHome ? 'gap-2' : 'gap-1')}>
+      <div className={clsx('inline-flex items-center', gapClass)}>
         <div className={chartSize}>
           <ResponsiveContainer width="100%" height="100%">
             <RadialBarChart
@@ -61,7 +78,7 @@ export function ResponsStats({ value, fill, isHome, size = 'md' }: ResponsStatsP
               data={data}
               startAngle={90}
               endAngle={-270}
-              barSize={size === 'sm' ? 6 : size === 'lg' ? 14 : 12}
+              barSize={barSize}
               cx="50%"
               cy="50%"
             >
@@ -70,7 +87,7 @@ export function ResponsStats({ value, fill, isHome, size = 'md' }: ResponsStatsP
             </RadialBarChart>
           </ResponsiveContainer>
         </div>
-        <span className={`${textSize} text-gray-500`}>{value.toFixed(2)}%</span>
+        <span className={clsx(textSize, valueClassName ?? 'text-gray-500')}>{formattedValue}%</span>
       </div>
     </HeroUITooltip>
   );

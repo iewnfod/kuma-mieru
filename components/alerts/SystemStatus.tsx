@@ -4,7 +4,8 @@ import { cn } from '@heroui/react';
 import { AlertTriangle, CheckCircle, Clock, type LucideIcon, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
-import { useConfig, useMonitorData } from '../utils/swr';
+import { calculateMonitorStatusCounts } from '@/utils/monitor-status';
+import { useMonitorData } from '../utils/swr';
 
 const pingAnimation = {
   animation: 'slowPing 3s cubic-bezier(0,0,0.2,1) infinite',
@@ -13,9 +14,8 @@ const pingAnimation = {
 export function SystemStatusAlert() {
   const t = useTranslations('status');
   const { monitoringData, monitorGroups, isLoading: isLoadingMonitors } = useMonitorData();
-  const { config, isLoading: isLoadingConfig } = useConfig();
 
-  const isLoading = isLoadingMonitors || isLoadingConfig;
+  const isLoading = isLoadingMonitors;
   const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
@@ -30,26 +30,21 @@ export function SystemStatusAlert() {
     return () => clearInterval(interval);
   }, []);
 
-  const totalMonitors = monitorGroups.reduce((sum, group) => sum + group.monitorList.length, 0);
-
-  const onlineMonitors = Object.entries(monitoringData?.heartbeatList || {}).filter(
-    ([_, heartbeats]) => heartbeats.length > 0 && heartbeats[0].status === 1,
-  ).length;
-
-  const offlineMonitors = Object.entries(monitoringData?.heartbeatList || {}).filter(
-    ([_, heartbeats]) => heartbeats.length > 0 && heartbeats[0].status === 0,
-  ).length;
-
-  const maintenanceMonitors = Object.entries(monitoringData?.heartbeatList || {}).filter(
-    ([_, heartbeats]) => heartbeats.length > 0 && heartbeats[0].status === 2,
-  ).length;
+  const statusCounts = calculateMonitorStatusCounts(
+    monitorGroups,
+    monitoringData?.heartbeatList || {}
+  );
+  const totalMonitors = statusCounts.total;
+  const affectedMonitors = statusCounts.abnormal;
 
   let systemStatus = 'normal';
 
   if (!isLoading) {
-    if (offlineMonitors - totalMonitors === 0) {
+    if (totalMonitors === 0) {
+      systemStatus = 'unknown';
+    } else if (affectedMonitors === totalMonitors) {
       systemStatus = 'error';
-    } else if (maintenanceMonitors > 0 || offlineMonitors > 0) {
+    } else if (affectedMonitors > 0) {
       systemStatus = 'warning';
     }
   }
@@ -79,6 +74,7 @@ export function SystemStatusAlert() {
     normal: CheckCircle,
     warning: AlertTriangle,
     error: X,
+    unknown: AlertTriangle,
     loading: Clock,
   };
 
@@ -145,7 +141,7 @@ export function SystemStatusAlert() {
               ) : (
                 <>
                   {getStatusText()}
-                  <span className="text-white/90 text-sm md:text-base ml-2">{`(${onlineMonitors}/${totalMonitors})`}</span>
+                  <span className="text-white/90 text-sm md:text-base ml-2">{`(${affectedMonitors}/${totalMonitors})`}</span>
                 </>
               )}
             </h1>
