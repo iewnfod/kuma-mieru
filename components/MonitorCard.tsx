@@ -115,7 +115,7 @@ export function MonitorCard({
           <div className="grid grid-rows-[auto_minmax(28px,auto)] gap-2 min-w-0 overflow-hidden">
             <div className="flex items-center gap-2 w-full min-w-0">
               <StatusIcon className={clsx(statusVisual.iconClassName, 'h-5 w-5 ml-1 shrink-0')} />
-              <h3 className="text-lg font-semibold truncate text-ellipsis max-w-36 md:max-w-40 lg:max-w-48">
+              <h3 className="text-lg font-semibold truncate text-ellipsis max-w-[85%]">
                 {monitor.name}
               </h3>
             </div>
