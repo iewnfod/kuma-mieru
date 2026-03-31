@@ -3,7 +3,7 @@
 import AutoRefresh from '@/components/AutoRefresh';
 import FilterResults from '@/components/FilterResults';
 import MonitorGroupList from '@/components/MonitorGroupList';
-import IncidentHistoryModule from '@/components/alerts/IncidentHistory';
+import { ActiveIncidentSection, ResolvedIncidentSection } from '@/components/alerts/IncidentHistory';
 import IncidentMarkdownAlert from '@/components/alerts/IncidentMarkdown';
 import MaintenanceAlert from '@/components/alerts/Maintenance';
 import SystemStatusAlert from '@/components/alerts/SystemStatus';
@@ -183,7 +183,7 @@ export function StatusPage() {
 
         {globalConfig?.incident && <IncidentMarkdownAlert incident={globalConfig.incident} />}
 
-        <IncidentHistoryModule />
+        <ActiveIncidentSection />
 
         <FilterResults matchedMonitorsCount={matchedMonitorsCount} />
 
@@ -195,6 +195,8 @@ export function StatusPage() {
           isGlobalLiteView={isGlobalLiteView}
           clearSearch={clearSearch}
         />
+
+        <ResolvedIncidentSection />
       </div>
     </AutoRefresh>
   );

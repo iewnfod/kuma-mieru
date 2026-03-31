@@ -61,6 +61,7 @@
   },
   "incident": {
     "sectionLabel": "故障公告",
+    "resolvedSectionLabel": "已解决的故障",
     "active": "进行中",
     "resolved": "已解决",
     "showResolved": "查看已解决的故障 ({count})",

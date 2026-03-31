@@ -117,67 +117,73 @@ function IncidentCard({ incident }: { incident: IncidentHistoryItem }) {
   );
 }
 
-function IncidentHistoryModule() {
+export function ActiveIncidentSection() {
   const t = useTranslations('incident');
   const { incidents, isLoading } = useIncidentHistory();
-  const [showResolved, setShowResolved] = useState(false);
 
   const activeIncidents = useMemo(() => incidents.filter(i => i.active), [incidents]);
-  const inactiveIncidents = useMemo(() => incidents.filter(i => !i.active), [incidents]);
 
-  if (isLoading || incidents.length === 0) {
+  if (isLoading || activeIncidents.length === 0) {
     return null;
   }
 
   return (
     <section className="mb-8" aria-label={t('sectionLabel')}>
-      {activeIncidents.length > 0 && (
-        <div className="space-y-4">
-          {activeIncidents.map(incident => (
-            <IncidentCard key={incident.id} incident={incident} />
-          ))}
-        </div>
-      )}
-
-      {inactiveIncidents.length > 0 && (
-        <div className="mt-6 pt-4 border-t border-gray-200/80 dark:border-gray-700/80">
-          <button
-            type="button"
-            onClick={() => setShowResolved(prev => !prev)}
-            className="flex w-full items-center justify-between rounded-lg border border-gray-200/80 bg-white/60 px-4 py-2.5 text-sm text-gray-600 transition-colors hover:bg-gray-50/80 dark:border-gray-700/80 dark:bg-zinc-900/40 dark:text-gray-400 dark:hover:bg-zinc-800/60"
-            aria-expanded={showResolved}
-          >
-            <span className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 shrink-0" />
-              {showResolved
-                ? t('hideResolved')
-                : t('showResolved', { count: inactiveIncidents.length })}
-            </span>
-            {showResolved ? (
-              <ChevronUp className="h-4 w-4 shrink-0" />
-            ) : (
-              <ChevronDown className="h-4 w-4 shrink-0" />
-            )}
-          </button>
-
-          <div
-            className={clsx(
-              'grid transition-[grid-template-rows,opacity] duration-200 ease-in-out',
-              showResolved ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
-            )}
-          >
-            <div className="overflow-hidden">
-              <div className="space-y-3 pt-3">
-                {inactiveIncidents.map(incident => (
-                  <IncidentCard key={incident.id} incident={incident} />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <div className="space-y-4">
+        {activeIncidents.map(incident => (
+          <IncidentCard key={incident.id} incident={incident} />
+        ))}
+      </div>
     </section>
   );
 }
 
-export default IncidentHistoryModule;
+export function ResolvedIncidentSection() {
+  const t = useTranslations('incident');
+  const { incidents, isLoading } = useIncidentHistory();
+  const [showResolved, setShowResolved] = useState(false);
+
+  const inactiveIncidents = useMemo(() => incidents.filter(i => !i.active), [incidents]);
+
+  if (isLoading || inactiveIncidents.length === 0) {
+    return null;
+  }
+
+  return (
+    <section className="mt-8 pt-6 border-t border-gray-200/80 dark:border-gray-700/80" aria-label={t('resolvedSectionLabel')}>
+      <button
+        type="button"
+        onClick={() => setShowResolved(prev => !prev)}
+        className="flex w-full items-center justify-between rounded-lg border border-gray-200/80 bg-white/60 px-4 py-2.5 text-sm text-gray-600 transition-colors hover:bg-gray-50/80 dark:border-gray-700/80 dark:bg-zinc-900/40 dark:text-gray-400 dark:hover:bg-zinc-800/60"
+        aria-expanded={showResolved}
+      >
+        <span className="flex items-center gap-2">
+          <CheckCircle className="h-4 w-4 shrink-0" />
+          {showResolved
+            ? t('hideResolved')
+            : t('showResolved', { count: inactiveIncidents.length })}
+        </span>
+        {showResolved ? (
+          <ChevronUp className="h-4 w-4 shrink-0" />
+        ) : (
+          <ChevronDown className="h-4 w-4 shrink-0" />
+        )}
+      </button>
+
+      <div
+        className={clsx(
+          'grid transition-[grid-template-rows,opacity] duration-200 ease-in-out',
+          showResolved ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+        )}
+      >
+        <div className="overflow-hidden">
+          <div className="space-y-3 pt-3">
+            {inactiveIncidents.map(incident => (
+              <IncidentCard key={incident.id} incident={incident} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

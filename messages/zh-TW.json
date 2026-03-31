@@ -61,9 +61,8 @@
   },
   "incident": {
     "sectionLabel": "故障公告",
+    "resolvedSectionLabel": "已解決的故障",
     "active": "進行中",
-    "resolved": "已解決",
-    "showResolved": "查看已解決的故障 ({count})",
     "hideResolved": "收起已解決的故障"
   },
   "navbar": {

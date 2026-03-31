@@ -61,6 +61,7 @@
   },
   "incident": {
     "sectionLabel": "Incident Announcements",
+    "resolvedSectionLabel": "Resolved Incidents",
     "active": "Active",
     "resolved": "Resolved",
     "showResolved": "Show resolved incidents ({count})",

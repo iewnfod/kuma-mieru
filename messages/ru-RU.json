@@ -61,6 +61,7 @@
   },
   "incident": {
     "sectionLabel": "Объявления об инцидентах",
+    "resolvedSectionLabel": "Решённые инциденты",
     "active": "Активен",
     "resolved": "Решён",
     "showResolved": "Показать решённые инциденты ({count})",
