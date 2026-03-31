@@ -6,7 +6,14 @@ import { useIncidentHistory } from '@/components/utils/swr';
 import type { IncidentHistoryItem } from '@/types/monitor';
 import { Card, CardBody, CardHeader, Chip, Divider } from '@heroui/react';
 import clsx from 'clsx';
-import { CheckCircle, ChevronDown, ChevronUp, CircleAlert, Info, TriangleAlert } from 'lucide-react';
+import {
+  CheckCircle,
+  ChevronDown,
+  ChevronUp,
+  CircleAlert,
+  Info,
+  TriangleAlert,
+} from 'lucide-react';
 import { useFormatter, useTranslations } from 'next-intl';
 import type { DateTimeFormatOptions } from 'next-intl';
 import { useMemo, useState } from 'react';
@@ -150,7 +157,10 @@ export function ResolvedIncidentSection() {
   }
 
   return (
-    <section className="mt-8 pt-6 border-t border-gray-200/80 dark:border-gray-700/80" aria-label={t('resolvedSectionLabel')}>
+    <section
+      className="mt-8 pt-6 border-t border-gray-200/80 dark:border-gray-700/80"
+      aria-label={t('resolvedSectionLabel')}
+    >
       <button
         type="button"
         onClick={() => setShowResolved(prev => !prev)}
@@ -176,7 +186,7 @@ export function ResolvedIncidentSection() {
           showResolved ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
         )}
       >
-        <div className="overflow-hidden p-4 w-full">
+        <div className={clsx("py-4 w-full", showResolved ? "" : "overflow-hidden")}>
           <div className="space-y-4 flex flex-col justify-start items-center w-full">
             {inactiveIncidents.map(incident => (
               <IncidentCard key={incident.id} incident={incident} />

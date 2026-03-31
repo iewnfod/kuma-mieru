@@ -3,7 +3,10 @@
 import AutoRefresh from '@/components/AutoRefresh';
 import FilterResults from '@/components/FilterResults';
 import MonitorGroupList from '@/components/MonitorGroupList';
-import { ActiveIncidentSection, ResolvedIncidentSection } from '@/components/alerts/IncidentHistory';
+import {
+  ActiveIncidentSection,
+  ResolvedIncidentSection,
+} from '@/components/alerts/IncidentHistory';
 import IncidentMarkdownAlert from '@/components/alerts/IncidentMarkdown';
 import MaintenanceAlert from '@/components/alerts/Maintenance';
 import SystemStatusAlert from '@/components/alerts/SystemStatus';
