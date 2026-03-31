@@ -147,13 +147,7 @@ export const Navbar = () => {
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href={homeHref}>
-            <img
-              src={iconUrl ?? '/icon.svg'}
-              alt=""
-              width={34}
-              height={34}
-              className="translate-y-1"
-            />
+            <img src={iconUrl ?? '/icon.svg'} alt="" width={34} height={34} className="mr-1" />
             <p className="font-bold text-inherit whitespace-pre">{resolvedTitle}</p>
           </NextLink>
         </NavbarBrand>
