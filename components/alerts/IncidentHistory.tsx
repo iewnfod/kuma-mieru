@@ -66,7 +66,7 @@ function IncidentCard({ incident }: { incident: IncidentHistoryItem }) {
   const htmlContent = useMarkdown(incident.content);
 
   return (
-    <Card className={clsx('border', cardToneMap[color])}>
+    <Card className={clsx('border w-full', cardToneMap[color])}>
       <CardHeader className="flex flex-row items-start justify-center gap-2 px-4 pt-4 pb-4">
         <div className="flex justify-center items-center mt-1">
           <IncidentIcon style={incident.style} />
@@ -154,7 +154,7 @@ export function ResolvedIncidentSection() {
       <button
         type="button"
         onClick={() => setShowResolved(prev => !prev)}
-        className="flex w-full items-center justify-between rounded-lg border border-gray-200/80 bg-white/60 px-4 py-2.5 text-sm text-gray-600 transition-colors hover:bg-gray-50/80 dark:border-gray-700/80 dark:bg-zinc-900/40 dark:text-gray-400 dark:hover:bg-zinc-800/60"
+        className="flex w-full items-center justify-between cursor-pointer rounded-lg border border-gray-200/80 bg-white/60 px-4 py-2.5 text-sm text-gray-600 transition-colors hover:bg-gray-50/80 dark:border-gray-700/80 dark:bg-zinc-900/40 dark:text-gray-400 dark:hover:bg-zinc-800/60"
         aria-expanded={showResolved}
       >
         <span className="flex items-center gap-2">
@@ -172,12 +172,12 @@ export function ResolvedIncidentSection() {
 
       <div
         className={clsx(
-          'grid transition-[grid-template-rows,opacity] duration-200 ease-in-out',
+          'grid transition-[grid-template-rows,opacity] duration-200 ease-in-out w-full',
           showResolved ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
         )}
       >
-        <div className="overflow-hidden">
-          <div className="space-y-3 pt-3">
+        <div className="overflow-hidden p-4 w-full">
+          <div className="space-y-4 flex flex-col justify-start items-center w-full">
             {inactiveIncidents.map(incident => (
               <IncidentCard key={incident.id} incident={incident} />
             ))}
