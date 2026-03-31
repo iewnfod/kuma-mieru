@@ -6,10 +6,10 @@ import { useIncidentHistory } from '@/components/utils/swr';
 import type { IncidentHistoryItem } from '@/types/monitor';
 import { Card, CardBody, CardHeader, Chip, Divider } from '@heroui/react';
 import clsx from 'clsx';
-import { CircleAlert, Info, TriangleAlert } from 'lucide-react';
+import { CheckCircle, ChevronDown, ChevronUp, CircleAlert, Info, TriangleAlert } from 'lucide-react';
 import { useFormatter, useTranslations } from 'next-intl';
 import type { DateTimeFormatOptions } from 'next-intl';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 type IncidentColor = 'default' | 'primary' | 'secondary' | 'warning' | 'danger' | 'success';
 
@@ -75,9 +75,13 @@ function IncidentCard({ incident }: { incident: IncidentHistoryItem }) {
           <h4 className="text-sm font-semibold leading-snug text-gray-900 dark:text-gray-100">
             {incident.title}
           </h4>
-          {incident.active && (
+          {incident.active ? (
             <Chip size="sm" color={color} variant="flat">
               {tIncident('active')}
+            </Chip>
+          ) : (
+            <Chip size="sm" color="default" variant="flat">
+              {tIncident('resolved')}
             </Chip>
           )}
         </div>
@@ -116,21 +120,62 @@ function IncidentCard({ incident }: { incident: IncidentHistoryItem }) {
 function IncidentHistoryModule() {
   const t = useTranslations('incident');
   const { incidents, isLoading } = useIncidentHistory();
+  const [showResolved, setShowResolved] = useState(false);
 
   const activeIncidents = useMemo(() => incidents.filter(i => i.active), [incidents]);
   const inactiveIncidents = useMemo(() => incidents.filter(i => !i.active), [incidents]);
 
-  if (isLoading || activeIncidents.length === 0) {
+  if (isLoading || incidents.length === 0) {
     return null;
   }
 
   return (
     <section className="mb-8" aria-label={t('sectionLabel')}>
-      <div className="space-y-4">
-        {activeIncidents.map(incident => (
-          <IncidentCard key={incident.id} incident={incident} />
-        ))}
-      </div>
+      {activeIncidents.length > 0 && (
+        <div className="space-y-4">
+          {activeIncidents.map(incident => (
+            <IncidentCard key={incident.id} incident={incident} />
+          ))}
+        </div>
+      )}
+
+      {inactiveIncidents.length > 0 && (
+        <div className="mt-3">
+          <button
+            type="button"
+            onClick={() => setShowResolved(prev => !prev)}
+            className="flex w-full items-center justify-between rounded-lg border border-gray-200/80 bg-white/60 px-4 py-2.5 text-sm text-gray-600 transition-colors hover:bg-gray-50/80 dark:border-gray-700/80 dark:bg-zinc-900/40 dark:text-gray-400 dark:hover:bg-zinc-800/60"
+            aria-expanded={showResolved}
+          >
+            <span className="flex items-center gap-2">
+              <CheckCircle className="h-4 w-4 shrink-0" />
+              {showResolved
+                ? t('hideResolved')
+                : t('showResolved', { count: inactiveIncidents.length })}
+            </span>
+            {showResolved ? (
+              <ChevronUp className="h-4 w-4 shrink-0" />
+            ) : (
+              <ChevronDown className="h-4 w-4 shrink-0" />
+            )}
+          </button>
+
+          <div
+            className={clsx(
+              'grid transition-[grid-template-rows,opacity] duration-200 ease-in-out',
+              showResolved ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+            )}
+          >
+            <div className="overflow-hidden">
+              <div className="space-y-3 pt-3">
+                {inactiveIncidents.map(incident => (
+                  <IncidentCard key={incident.id} incident={incident} />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

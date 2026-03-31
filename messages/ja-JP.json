@@ -61,7 +61,10 @@
   },
   "incident": {
     "sectionLabel": "障害アナウンス",
-    "active": "対応中"
+    "active": "対応中",
+    "resolved": "解決済み",
+    "showResolved": "解決済みの障害を表示 ({count})",
+    "hideResolved": "解決済みの障害を非表示"
   },
   "navbar": {
     "main": "メインナビゲーション",

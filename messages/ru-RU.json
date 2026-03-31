@@ -61,7 +61,10 @@
   },
   "incident": {
     "sectionLabel": "Объявления об инцидентах",
-    "active": "Активен"
+    "active": "Активен",
+    "resolved": "Решён",
+    "showResolved": "Показать решённые инциденты ({count})",
+    "hideResolved": "Скрыть решённые инциденты"
   },
   "navbar": {
     "main": "Главная навигация",

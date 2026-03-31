@@ -61,7 +61,10 @@
   },
   "incident": {
     "sectionLabel": "장애 공지",
-    "active": "진행 중"
+    "active": "진행 중",
+    "resolved": "해결됨",
+    "showResolved": "해결된 장애 보기 ({count})",
+    "hideResolved": "해결된 장애 숨기기"
   },
   "navbar": {
     "main": "메인 네비게이션",

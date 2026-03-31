@@ -61,7 +61,10 @@
   },
   "incident": {
     "sectionLabel": "Incident Announcements",
-    "active": "Active"
+    "active": "Active",
+    "resolved": "Resolved",
+    "showResolved": "Show resolved incidents ({count})",
+    "hideResolved": "Hide resolved incidents"
   },
   "navbar": {
     "main": "Main navigation",
