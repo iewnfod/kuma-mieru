@@ -22,6 +22,8 @@ export const generatedConfigSchema = z.object({
   isPlaceholder: z.boolean(),
   isEditThisPage: z.boolean(),
   isShowStarButton: z.boolean(),
+  isShowHomeButton: z.boolean(),
+  homeLink: z.string(),
 });
 
 export type SiteMeta = z.infer<typeof siteMetaSchema>;

@@ -14,24 +14,6 @@ function loadGeneratedConfig() {
     throw new Error(`Failed to load generated config at ${configPath}: ${reason}`);
   }
 }
-import generatedConfig from './generated-config.json';
-import type { GeneratedConfig } from './types';
-
-// 验证生成的配置
-const configSchema = z.object({
-  baseUrl: z.string().url(),
-  pageId: z.string(),
-  siteMeta: z.object({
-    title: z.string(),
-    description: z.string(),
-    icon: z.string(),
-  }),
-  isPlaceholder: z.boolean(),
-  isEditThisPage: z.boolean(),
-  isShowStarButton: z.boolean(),
-  isShowHomeButton: z.boolean(),
-  homeLink: z.string(),
-});
 
 // 确保配置符合schema
 const config = generatedConfigSchema.parse(loadGeneratedConfig());
