@@ -3,7 +3,7 @@
 import AutoRefresh from '@/components/AutoRefresh';
 import FilterResults from '@/components/FilterResults';
 import MonitorGroupList from '@/components/MonitorGroupList';
-import IncidentMarkdownAlert from '@/components/alerts/IncidentMarkdown';
+import IncidentCard from '@/components/alerts/IncidentCard';
 import MaintenanceAlert from '@/components/alerts/Maintenance';
 import SystemStatusAlert from '@/components/alerts/SystemStatus';
 import { useNodeSearch } from '@/components/context/NodeSearchContext';
@@ -176,11 +176,11 @@ export function StatusPage() {
           </Tooltip>
         </div>
 
+        {globalConfig?.incident && <IncidentCard incident={globalConfig.incident} />}
+
         {activeMaintenances.map(maintenance => (
           <MaintenanceAlert key={maintenance.id} maintenance={maintenance} />
         ))}
-
-        {globalConfig?.incident && <IncidentMarkdownAlert incident={globalConfig.incident} />}
 
         <FilterResults matchedMonitorsCount={matchedMonitorsCount} />
 
