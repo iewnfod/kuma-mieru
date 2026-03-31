@@ -59,6 +59,14 @@
     "createdAt": "Published at {time}",
     "updatedAt": "Updated at {time}"
   },
+  "incident": {
+    "sectionLabel": "Incident Announcements",
+    "resolvedSectionLabel": "Resolved Incidents",
+    "active": "Active",
+    "resolved": "Resolved",
+    "showResolved": "Show resolved incidents ({count})",
+    "hideResolved": "Hide resolved incidents"
+  },
   "navbar": {
     "main": "Main navigation",
     "toolbar": "Toolbar",

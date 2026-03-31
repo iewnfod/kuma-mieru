@@ -94,6 +94,33 @@ export interface Incident {
 }
 
 /**
+ * Incident History Item
+ * Source: Uptime-Kuma - /api/status-page/{pageId}/incident-history
+ */
+export interface IncidentHistoryItem {
+  id: number;
+  style: 'info' | 'warning' | 'danger' | 'primary' | 'light' | 'dark';
+  title: string;
+  content: string;
+  pin: boolean;
+  active: boolean;
+  createdDate: string;
+  lastUpdatedDate: string;
+  status_page_id: number;
+}
+
+/**
+ * Incident History Response
+ */
+export interface IncidentHistoryResponse {
+  ok: boolean;
+  incidents: IncidentHistoryItem[];
+  total: number;
+  nextCursor: string | null;
+  hasMore: boolean;
+}
+
+/**
  * Monitor Response
  */
 export interface MonitorResponse {

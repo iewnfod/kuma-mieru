@@ -59,6 +59,12 @@
     "createdAt": "發佈於 {time}",
     "updatedAt": "更新於 {time}"
   },
+  "incident": {
+    "sectionLabel": "故障公告",
+    "resolvedSectionLabel": "已解決的故障",
+    "active": "進行中",
+    "hideResolved": "收起已解決的故障"
+  },
   "navbar": {
     "main": "主導航欄",
     "toolbar": "工具列",

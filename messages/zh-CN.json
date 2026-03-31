@@ -59,6 +59,14 @@
     "createdAt": "发布于 {time}",
     "updatedAt": "更新于 {time}"
   },
+  "incident": {
+    "sectionLabel": "故障公告",
+    "resolvedSectionLabel": "已解决的故障",
+    "active": "进行中",
+    "resolved": "已解决",
+    "showResolved": "查看已解决的故障 ({count})",
+    "hideResolved": "收起已解决的故障"
+  },
   "navbar": {
     "main": "主导航栏",
     "toolbar": "工具栏",

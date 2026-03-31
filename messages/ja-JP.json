@@ -59,6 +59,14 @@
     "createdAt": "作成日時: {time}",
     "updatedAt": "更新日時: {time}"
   },
+  "incident": {
+    "sectionLabel": "障害アナウンス",
+    "resolvedSectionLabel": "解決済みの障害",
+    "active": "対応中",
+    "resolved": "解決済み",
+    "showResolved": "解決済みの障害を表示 ({count})",
+    "hideResolved": "解決済みの障害を非表示"
+  },
   "navbar": {
     "main": "メインナビゲーション",
     "toolbar": "ツールバー",

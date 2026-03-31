@@ -2,7 +2,7 @@
 
 import { usePageConfig } from '@/components/context/PageConfigContext';
 import type { GlobalConfig } from '@/types/config';
-import type { MonitorResponse, MonitoringData } from '@/types/monitor';
+import type { IncidentHistoryResponse, MonitorResponse, MonitoringData } from '@/types/monitor';
 import useSWR, { mutate } from 'swr';
 import type { SWRConfiguration } from 'swr';
 
@@ -49,6 +49,8 @@ const fetcher = async <T>(url: string): Promise<T> => {
 export const SWR_KEYS = {
   MONITOR: (pageId: string) => `/api/monitor?pageId=${encodeURIComponent(pageId)}`,
   CONFIG: (pageId: string) => `/api/config?pageId=${encodeURIComponent(pageId)}`,
+  INCIDENT_HISTORY: (pageId: string) =>
+    `/api/incident-history?pageId=${encodeURIComponent(pageId)}`,
 };
 
 /**
@@ -203,4 +205,33 @@ export function revalidateData(pageId: string, key?: string) {
   }
 
   return Promise.all([mutate(SWR_KEYS.MONITOR(pageId)), mutate(SWR_KEYS.CONFIG(pageId))]);
+}
+
+/**
+ * Hook to fetch incident history data
+ * @param config - SWR configuration options
+ * @returns incident history data, loading state and error info
+ */
+export function useIncidentHistory(config?: SWRConfiguration) {
+  const { pageId } = usePageConfig();
+
+  const {
+    data,
+    error,
+    isLoading,
+    mutate: revalidate,
+  } = useSWR<IncidentHistoryResponse>(SWR_KEYS.INCIDENT_HISTORY(pageId), fetcher, {
+    ...DEFAULT_SWR_CONFIG,
+    refreshInterval: 60000,
+    ...config,
+  });
+
+  return {
+    incidents: data?.incidents || [],
+    total: data?.total ?? 0,
+    isLoading,
+    isError: !!error,
+    error,
+    revalidate,
+  };
 }
