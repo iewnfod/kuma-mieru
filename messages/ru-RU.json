@@ -59,6 +59,10 @@
     "createdAt": "Опубликовано {time}",
     "updatedAt": "Обновлено {time}"
   },
+  "incident": {
+    "sectionLabel": "Объявления об инцидентах",
+    "active": "Активен"
+  },
   "navbar": {
     "main": "Главная навигация",
     "toolbar": "Панель инструментов",

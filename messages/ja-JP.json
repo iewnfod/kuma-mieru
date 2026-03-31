@@ -59,6 +59,10 @@
     "createdAt": "作成日時: {time}",
     "updatedAt": "更新日時: {time}"
   },
+  "incident": {
+    "sectionLabel": "障害アナウンス",
+    "active": "対応中"
+  },
   "navbar": {
     "main": "メインナビゲーション",
     "toolbar": "ツールバー",

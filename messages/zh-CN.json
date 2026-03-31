@@ -59,6 +59,10 @@
     "createdAt": "发布于 {time}",
     "updatedAt": "更新于 {time}"
   },
+  "incident": {
+    "sectionLabel": "故障公告",
+    "active": "进行中"
+  },
   "navbar": {
     "main": "主导航栏",
     "toolbar": "工具栏",

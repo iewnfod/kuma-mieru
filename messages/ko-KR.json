@@ -59,6 +59,10 @@
     "createdAt": "{time}에 게시됨",
     "updatedAt": "{time}에 업데이트됨"
   },
+  "incident": {
+    "sectionLabel": "장애 공지",
+    "active": "진행 중"
+  },
   "navbar": {
     "main": "메인 네비게이션",
     "toolbar": "도구 모음",
