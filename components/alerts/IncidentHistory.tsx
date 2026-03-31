@@ -11,7 +11,7 @@ import { useFormatter, useTranslations } from 'next-intl';
 import type { DateTimeFormatOptions } from 'next-intl';
 import { useMemo } from 'react';
 
-type IncidentColor = 'default' | 'primary' | 'secondary' | 'warning' | 'danger';
+type IncidentColor = 'default' | 'primary' | 'secondary' | 'warning' | 'danger' | 'success';
 
 function getIncidentColor(style: IncidentHistoryItem['style']): IncidentColor {
   switch (style) {
@@ -23,22 +23,20 @@ function getIncidentColor(style: IncidentHistoryItem['style']): IncidentColor {
       return 'default';
     case 'dark':
       return 'secondary';
+    case 'primary':
+      return 'success';
     default:
       return 'primary';
   }
 }
 
 const cardToneMap: Record<IncidentColor, string> = {
-  default:
-    'border-gray-200/80 bg-white/90 dark:border-gray-700/80 dark:bg-zinc-900/80',
-  primary:
-    'border-blue-200/80 bg-blue-50/80 dark:border-blue-800/70 dark:bg-blue-950/35',
-  secondary:
-    'border-violet-200/80 bg-violet-50/80 dark:border-violet-800/70 dark:bg-violet-950/35',
-  warning:
-    'border-amber-200/80 bg-amber-50/80 dark:border-amber-800/70 dark:bg-amber-950/35',
-  danger:
-    'border-rose-200/80 bg-rose-50/80 dark:border-rose-800/70 dark:bg-rose-950/35',
+  default: 'border-gray-200/80 bg-white/90 dark:border-gray-700/80 dark:bg-zinc-900/80',
+  primary: 'border-blue-200/80 bg-blue-50/80 dark:border-blue-800/70 dark:bg-blue-950/35',
+  secondary: 'border-violet-200/80 bg-violet-50/80 dark:border-violet-800/70 dark:bg-violet-950/35',
+  warning: 'border-amber-200/80 bg-amber-50/80 dark:border-amber-800/70 dark:bg-amber-950/35',
+  danger: 'border-rose-200/80 bg-rose-50/80 dark:border-rose-800/70 dark:bg-rose-950/35',
+  success: 'border-green-200/80 bg-green-50/80 dark:border-green-800/70 dark:bg-green-950/35',
 };
 
 function IncidentIcon({ style }: { style: IncidentHistoryItem['style'] }) {
@@ -69,21 +67,19 @@ function IncidentCard({ incident }: { incident: IncidentHistoryItem }) {
 
   return (
     <Card className={clsx('border', cardToneMap[color])}>
-      <CardHeader className="flex items-start gap-3 px-4 pt-4 pb-2">
-        <div className="mt-0.5">
+      <CardHeader className="flex flex-row items-start justify-center gap-2 px-4 pt-4 pb-4">
+        <div className="flex justify-center items-center mt-1">
           <IncidentIcon style={incident.style} />
         </div>
-        <div className="flex min-w-0 flex-1 flex-col gap-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <h4 className="text-sm font-semibold leading-snug text-gray-900 dark:text-gray-100">
-              {incident.title}
-            </h4>
-            {incident.active && (
-              <Chip size="sm" color={color} variant="flat">
-                {tIncident('active')}
-              </Chip>
-            )}
-          </div>
+        <div className="flex grow flex-row items-center justify-start gap-2">
+          <h4 className="text-sm font-semibold leading-snug text-gray-900 dark:text-gray-100">
+            {incident.title}
+          </h4>
+          {incident.active && (
+            <Chip size="sm" color={color} variant="flat">
+              {tIncident('active')}
+            </Chip>
+          )}
         </div>
       </CardHeader>
 
@@ -96,7 +92,7 @@ function IncidentCard({ incident }: { incident: IncidentHistoryItem }) {
           dangerouslySetInnerHTML={{ __html: htmlContent }}
         />
 
-        <div className="flex flex-col items-end gap-1 border-t border-gray-200/80 pt-3 dark:border-gray-700/70">
+        <div className="flex flex-col items-end gap-1 pt-3">
           {incident.lastUpdatedDate ? (
             <span className="text-xs text-gray-500 dark:text-gray-400">
               {t('updatedAt', {
@@ -107,10 +103,7 @@ function IncidentCard({ incident }: { incident: IncidentHistoryItem }) {
           {incident.createdDate ? (
             <span className="text-xs text-gray-500 dark:text-gray-400">
               {t('createdAt', {
-                time: format.dateTime(
-                  dateStringToTimestamp(incident.createdDate),
-                  dateTimeFormat
-                ),
+                time: format.dateTime(dateStringToTimestamp(incident.createdDate), dateTimeFormat),
               })}
             </span>
           ) : null}
@@ -124,10 +117,8 @@ function IncidentHistoryModule() {
   const t = useTranslations('incident');
   const { incidents, isLoading } = useIncidentHistory();
 
-  const activeIncidents = useMemo(
-    () => incidents.filter(i => i.active),
-    [incidents]
-  );
+  const activeIncidents = useMemo(() => incidents.filter(i => i.active), [incidents]);
+  const inactiveIncidents = useMemo(() => incidents.filter(i => !i.active), [incidents]);
 
   if (isLoading || activeIncidents.length === 0) {
     return null;
@@ -135,7 +126,7 @@ function IncidentHistoryModule() {
 
   return (
     <section className="mb-8" aria-label={t('sectionLabel')}>
-      <div className="space-y-3">
+      <div className="space-y-4">
         {activeIncidents.map(incident => (
           <IncidentCard key={incident.id} incident={incident} />
         ))}
