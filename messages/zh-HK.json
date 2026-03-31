@@ -97,6 +97,15 @@
     "systemError": "系統嚴重故障",
     "systemUnknown": "系統狀態未明"
   },
+  "event": {
+    "title": "近期事件",
+    "preview": "{count} 條事件",
+    "statusUp": "已恢復",
+    "statusDown": "故障",
+    "statusPending": "降級",
+    "statusMaintenance": "維護中",
+    "statusUnknown": "未知"
+  },
   "errorPage": {
     "title": "發生錯誤！",
     "currentUnavailableTitle": "目前狀態頁面暫時無法使用",

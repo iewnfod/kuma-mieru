@@ -97,6 +97,15 @@
     "systemError": "服务运行异常",
     "systemUnknown": "服务状态未知"
   },
+  "event": {
+    "title": "近期事件",
+    "preview": "{count} 条事件",
+    "statusUp": "已恢复",
+    "statusDown": "故障",
+    "statusPending": "降级",
+    "statusMaintenance": "维护中",
+    "statusUnknown": "未知"
+  },
   "errorPage": {
     "title": "出错了！",
     "currentUnavailableTitle": "当前状态页暂不可用",

@@ -97,6 +97,15 @@
     "systemError": "Ошибка работы сервисов",
     "systemUnknown": "Статус сервисов неизвестен"
   },
+  "event": {
+    "title": "Последние события",
+    "preview": "{count} событий",
+    "statusUp": "Восстановлено",
+    "statusDown": "Сбой",
+    "statusPending": "Деградация",
+    "statusMaintenance": "Обслуживание",
+    "statusUnknown": "Неизвестно"
+  },
   "errorPage": {
     "title": "Произошла ошибка!",
     "currentUnavailableTitle": "Эта страница статуса в настоящее время недоступна",

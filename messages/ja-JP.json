@@ -97,6 +97,15 @@
     "systemError": "システムに重大障害が発生しました",
     "systemUnknown": "システム状態を確認できません"
   },
+  "event": {
+    "title": "最近のイベント",
+    "preview": "{count} 件のイベント",
+    "statusUp": "復旧",
+    "statusDown": "障害",
+    "statusPending": "低下",
+    "statusMaintenance": "保守中",
+    "statusUnknown": "不明"
+  },
   "errorPage": {
     "title": "エラーが発生しました！",
     "currentUnavailableTitle": "このステータスページは現在利用できません",

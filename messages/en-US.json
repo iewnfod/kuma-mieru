@@ -97,6 +97,15 @@
     "systemError": "Critical system failure",
     "systemUnknown": "System status unavailable"
   },
+  "event": {
+    "title": "Recent Events",
+    "preview": "{count} recent event(s)",
+    "statusUp": "Recovered",
+    "statusDown": "Outage",
+    "statusPending": "Degraded",
+    "statusMaintenance": "Maintenance",
+    "statusUnknown": "Unknown"
+  },
   "errorPage": {
     "title": "Something went wrong!",
     "currentUnavailableTitle": "This status page is currently unavailable",
