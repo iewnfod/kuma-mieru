@@ -15,6 +15,12 @@ const config = {
         sans: ['var(--font-sans)'],
         mono: ['var(--font-mono)'],
       },
+      boxShadow: {
+        'around-md': '0 0 3px #ddd',
+        'around-lg': '0 0 5px #ccc',
+        'around-md-dark': '0 0 5px #555',
+        'around-lg-dark': '0 0 10px #555',
+      },
     },
   },
   darkMode: 'class',

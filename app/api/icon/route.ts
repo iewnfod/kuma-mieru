@@ -5,6 +5,7 @@ import { getUpstreamIconUrl } from '@/services/config.server';
 import { customFetch } from '@/services/utils/fetch';
 import { normalizeBaseUrl } from '@/utils/url';
 import { NextResponse } from 'next/server';
+import KumaMieruConfig from '@/config/generated-config.json';
 
 export const runtime = 'nodejs';
 
@@ -81,48 +82,50 @@ export async function GET(request: Request) {
   }
 
   try {
+    console.log(KumaMieruConfig.siteMeta.icon);
     const icon =
+      normalizeIconValue(KumaMieruConfig.siteMeta.icon) ??
       normalizeIconValue(pageConfig.siteMeta.icon) ??
       normalizeIconValue(await getUpstreamIconUrl(pageConfig));
     if (!icon) {
       return fallback();
     }
 
-    const targetUrl = resolveUpstreamIconUrl(icon, pageConfig.baseUrl);
-    if (!targetUrl) {
-      return fallback();
-    }
+    // const targetUrl = resolveUpstreamIconUrl(icon, pageConfig.baseUrl);
+    // if (!targetUrl) {
+    //   return fallback();
+    // }
+    //
+    // const upstreamResponse = await customFetch(targetUrl, {
+    //   headers: { Accept: 'image/*,*/*;q=0.8' },
+    //   timeout: 10000,
+    // });
+    //
+    // if (!upstreamResponse.ok) {
+    //   return fallback();
+    // }
+    //
+    // const contentType = upstreamResponse.headers['content-type'] || '';
+    // if (!contentType.startsWith('image/')) {
+    //   return fallback();
+    // }
+    //
+    // const contentLength = Number(upstreamResponse.headers['content-length'] || '0');
+    // if (contentLength > MAX_ICON_SIZE) {
+    //   return fallback();
+    // }
+    //
+    // const data = await upstreamResponse.arrayBuffer();
+    // if (data.byteLength > MAX_ICON_SIZE) {
+    //   return fallback();
+    // }
 
-    const upstreamResponse = await customFetch(targetUrl, {
-      headers: { Accept: 'image/*,*/*;q=0.8' },
-      timeout: 10000,
-    });
-
-    if (!upstreamResponse.ok) {
-      return fallback();
-    }
-
-    const contentType = upstreamResponse.headers['content-type'] || '';
-    if (!contentType.startsWith('image/')) {
-      return fallback();
-    }
-
-    const contentLength = Number(upstreamResponse.headers['content-length'] || '0');
-    if (contentLength > MAX_ICON_SIZE) {
-      return fallback();
-    }
-
-    const data = await upstreamResponse.arrayBuffer();
-    if (data.byteLength > MAX_ICON_SIZE) {
-      return fallback();
-    }
-
-    return new NextResponse(data, {
+    return new NextResponse(icon, {
       status: 200,
-      headers: {
-        'Content-Type': contentType,
-        'Cache-Control': 'public, max-age=300, s-maxage=300, stale-while-revalidate=600',
-      },
+      // headers: {
+      //   'Content-Type': contentType,
+      //   'Cache-Control': 'public, max-age=300, s-maxage=300, stale-while-revalidate=600',
+      // },
     });
   } catch (error) {
     console.error('Failed to proxy icon', {

@@ -16,7 +16,7 @@ import { link as linkStyles } from '@heroui/theme';
 import clsx from 'clsx';
 import Image from 'next/image';
 import NextLink from 'next/link';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { GithubIcon, SearchIcon } from '@/components/basic/icons';
 import { ThemeSwitch } from '@/components/basic/theme-switch';
@@ -51,7 +51,9 @@ export const Navbar = () => {
   const { config: globalConfig } = useConfig();
   const showEditPage = pageConfig.isEditThisPage;
 
-  const resolvedTitle = globalConfig?.config.title || pageConfig.siteMeta.title;
+  const resolvedTitle = globalConfig?.config.title
+    ? `${pageConfig.siteMeta.title}  -  ${globalConfig?.config.title}`
+    : pageConfig.siteMeta.title;
 
   const homeHref = pageConfig.pageId === pageConfig.defaultPageId ? '/' : `/${pageConfig.pageId}`;
 
@@ -118,7 +120,16 @@ export const Navbar = () => {
     </Button>
   );
 
-  const getIconUrl = () => buildIconProxyUrl(pageConfig.pageId) || '/icon.svg';
+  const iconUrl = useRef<string>('/icon.svg');
+  const getIconUrl = async () => {
+    const icon = await fetch(buildIconProxyUrl(pageConfig.pageId)).then(res => res.text());
+    return icon ?? '/icon.svg';
+  };
+  useEffect(() => {
+    getIconUrl().then(icon => {
+      iconUrl.current = icon;
+    });
+  }, []);
   const navItems = [
     {
       label: 'page.main',
@@ -142,12 +153,13 @@ export const Navbar = () => {
         <NavbarBrand className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href={homeHref}>
             <Image
-              src={getIconUrl() || '/icon.svg'}
-              alt={`${resolvedTitle} logo`}
+              src={iconUrl.current ?? '/icon.svg'}
+              alt=""
               width={34}
               height={34}
+              className="translate-y-1"
             />
-            <p className="font-bold text-inherit">{resolvedTitle}</p>
+            <p className="font-bold text-inherit whitespace-pre">{resolvedTitle}</p>
           </NextLink>
         </NavbarBrand>
         {navItems.map((item, index) => {

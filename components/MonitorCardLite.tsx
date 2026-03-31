@@ -53,7 +53,11 @@ export function MonitorCardLite({
       whileHover={isHome ? { y: -3, transition: { duration: 0.2 } } : {}}
     >
       <Card
-        className={clsx('w-full h-auto', isHome && 'cursor-pointer hover:shadow-md transition-all')}
+        className={clsx(
+          'w-full h-auto',
+          isHome &&
+            'cursor-pointer shadow-around-md hover:shadow-around-lg dark:shadow-around-md-dark dark:hover:shadow-around-lg-dark transition-all'
+        )}
       >
         <CardBody className="py-2 px-4">
           <div className="flex items-center justify-between gap-2">
@@ -61,11 +65,9 @@ export function MonitorCardLite({
               <StatusIcon className={clsx(statusVisual.iconClassName, 'h-5 w-5 shrink-0')} />
               <div className="flex min-w-0 flex-1 items-center gap-2">
                 <div className="min-w-0 flex-1">
-                  <Tooltip content={monitor.name} placement="top" delay={300}>
-                    <h3 className="truncate text-ellipsis whitespace-nowrap font-semibold">
-                      {monitor.name}
-                    </h3>
-                  </Tooltip>
+                  <h3 className="truncate text-ellipsis whitespace-nowrap font-semibold">
+                    {monitor.name}
+                  </h3>
                 </div>
 
                 {monitor.tags && monitor.tags.length > 0 && (

@@ -107,18 +107,16 @@ export function MonitorCard({
         className={clsx(
           'h-full grid grid-rows-[auto_1fr]',
           isHome ? 'w-full' : 'w-full md:w-2/3 mx-auto',
-          isHome && 'cursor-pointer hover:shadow-md transition-all'
+          isHome && 'cursor-pointer shadow-around-md hover:shadow-around-lg dark:shadow-around-md-dark dark:hover:shadow-around-lg-dark transition-all'
         )}
       >
         <CardHeader className="grid grid-cols-[1fr_auto] gap-4 items-start">
           <div className="grid grid-rows-[auto_minmax(28px,auto)] gap-2 min-w-0 overflow-hidden">
             <div className="flex items-center gap-2 w-full min-w-0">
               <StatusIcon className={clsx(statusVisual.iconClassName, 'h-5 w-5 ml-1 shrink-0')} />
-              <Tooltip content={monitor.name} placement="top" delay={300}>
-                <h3 className="text-lg font-semibold truncate text-ellipsis max-w-36 md:max-w-40 lg:max-w-48">
-                  {monitor.name}
-                </h3>
-              </Tooltip>
+              <h3 className="text-lg font-semibold truncate text-ellipsis max-w-36 md:max-w-40 lg:max-w-48">
+                {monitor.name}
+              </h3>
             </div>
             <div>
               {monitor.tags && monitor.tags.length > 0 && (

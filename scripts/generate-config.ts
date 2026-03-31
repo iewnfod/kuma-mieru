@@ -1,13 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import {
-  DEFAULT_SITE_ICON,
-  DEFAULT_SITE_META as DEFAULT_SITE_META_VALUES,
-} from '../config/defaults';
-import { generatedConfigSchema, siteMetaSchema } from '../config/schemas';
+import { z } from 'zod';
+import { DEFAULT_SITE_META as DEFAULT_SITE_META_VALUES } from '../config/defaults';
 import type { SiteMeta } from '../config/schemas';
+import { generatedConfigSchema, siteMetaSchema } from '../config/schemas';
 import { resolvePreloadDataFromHtml } from '../utils/preload-data';
-import { getString, getBooleanWithSource, formatResolved } from './lib/env';
+import { getBooleanWithSource, getString } from './lib/env';
 import { resolveEndpointConfig } from './lib/uptime-kuma';
 
 import 'dotenv/config';
@@ -92,16 +90,6 @@ const resolveSiteMeta = ({
     iconCandidates,
   });
 };
-const configSchema = z.object({
-  baseUrl: z.string().url(),
-  pageId: z.string(),
-  siteMeta: siteMetaSchema,
-  isPlaceholder: z.boolean().default(false),
-  isEditThisPage: z.boolean().default(false),
-  isShowStarButton: z.boolean().default(true),
-  isShowHomeButton: z.boolean().default(true),
-  homeLink: z.string().default('/'),
-});
 
 function getRequiredEnvVar(name: string): string {
   const value = process.env[name];

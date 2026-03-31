@@ -312,17 +312,17 @@ docker run -d \
 > [!WARNING]
 > 默认情况下（`STRICT_IMAGE_REMOTE_PATTERNS=false`）会放开 `next/image` 的远程图片域名限制，以避免 Docker 运行时域名变化导致图片加载失败。
 > 如果你运行在高安全要求环境，建议在自建镜像时设置 `STRICT_IMAGE_REMOTE_PATTERNS=true`，并确保构建阶段可生成完整域名白名单。
-| 变量名                      | 必填 | 说明                       | 示例/默认值                                        |
-|--------------------------| ---- |--------------------------| -------------------------------------------------- |
-| UPTIME_KUMA_BASE_URL     | Yes  | Uptime Kuma 实例的基础 URL    | https://example.kuma-mieru.invalid                 |
-| PAGE_ID                  | Yes  | Uptime Kuma 实例的状态页面 ID   | test1                                              |
-| FEATURE_EDIT_THIS_PAGE   | No   | 是否展示 "Edit This Page" 按钮 | false                                              |
-| FEATURE_SHOW_STAR_BUTTON | No   | 是否展示 "Star on Github" 按钮 | true                                               |
-| FEATURE_SHOW_HOME_BUTTON | No   | 是否展示 "Home" 按钮           | true                                               |
-| FEATURE_TITLE            | No   | 自定义页面标题                  | Kuma Mieru                                         |
-| FEATURE_DESCRIPTION      | No   | 自定义页面描述                  | A beautiful and modern uptime monitoring dashboard |
-| FEATURE_ICON             | No   | 自定义页面图标URL               | /icon.svg                                          |
-| FEATURE_HOME_LINK        | No   | 自定义 "Home" 按钮 URL        | /                                          |
+> | 变量名 | 必填 | 说明 | 示例/默认值 |
+> |--------------------------| ---- |--------------------------| -------------------------------------------------- |
+> | UPTIME_KUMA_BASE_URL | Yes | Uptime Kuma 实例的基础 URL | https://example.kuma-mieru.invalid |
+> | PAGE_ID | Yes | Uptime Kuma 实例的状态页面 ID | test1 |
+> | FEATURE_EDIT_THIS_PAGE | No | 是否展示 "Edit This Page" 按钮 | false |
+> | FEATURE_SHOW_STAR_BUTTON | No | 是否展示 "Star on Github" 按钮 | true |
+> | FEATURE_SHOW_HOME_BUTTON | No | 是否展示 "Home" 按钮 | true |
+> | FEATURE_TITLE | No | 自定义页面标题 | Kuma Mieru |
+> | FEATURE_DESCRIPTION | No | 自定义页面描述 | A beautiful and modern uptime monitoring dashboard |
+> | FEATURE_ICON | No | 自定义页面图标URL | /icon.svg |
+> | FEATURE_HOME_LINK | No | 自定义 "Home" 按钮 URL | / |
 
 ## 与 Uptime Kuma 集成 :link:
 

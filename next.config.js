@@ -79,6 +79,9 @@ const baseConfig = {
       {
         pathname: '/api/icon',
       },
+      {
+        pathname: '/icon.svg',
+      },
     ],
     formats: ['image/avif', 'image/webp'],
     dangerouslyAllowSVG: true,
